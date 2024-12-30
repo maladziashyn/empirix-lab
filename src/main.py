@@ -2,22 +2,19 @@ import gi
 # gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Adw, Gio
-from sys import path
 
-import session_var as sv
+from gresource import init_gresource as ir
+ir.init_resources()
 
-if sv.HOME_SRC not in path:
-    path.append(sv.HOME_SRC)
-
-# from ui.load_widgets import load_widgets  # load custom widget templates
-from widget.window import AppWindow
+from gresource.init_widgets import load_widgets
+from gresource.window import AppWindow
 
 
 class MyApp(Adw.Application):
     """The main application singleton class."""
 
     def __init__(self):
-        super().__init__(application_id=sv.APP_ID,
+        super().__init__(application_id=ir.APP_ID,
                          flags=Gio.ApplicationFlags.DEFAULT_FLAGS)
 
     def do_activate(self):

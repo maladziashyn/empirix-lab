@@ -80,9 +80,11 @@
                                 <property name="margin_end">30</property>
                                 <property name="margin_bottom">30</property>
 
-<!--                                <child>
+
+                                <child>
                                   <object class="MyClass" id="new_page"/>
-                                </child>-->
+                                </child>
+
 
                                 <child>
                                   <object class="AdwPreferencesGroup" id="mc_pref_group_report_layout">

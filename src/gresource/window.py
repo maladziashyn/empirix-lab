@@ -2,17 +2,15 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Adw, Gtk
-from os.path import basename, dirname, join, splitext
 
 
-fstem = splitext(basename(__file__))[0]
-
-@Gtk.Template(filename=join(dirname(__file__), fstem+".ui"))
+@Gtk.Template(resource_path="/eu/rsmlabs/EmpirixLab/window.ui")
 class AppWindow(Adw.ApplicationWindow):
     __gtype_name__ = "AppWindow"
 
     entry_mc_target_dir = Gtk.Template.Child()  # entry row
     btn_target_dir = Gtk.Template.Child()
+    # new_page = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
