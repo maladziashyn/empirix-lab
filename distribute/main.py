@@ -4,6 +4,7 @@ import shutil
 from math import ceil
 from os import makedirs, mkdir, remove, system, walk
 from os.path import dirname, expanduser, getsize, isdir, join, realpath
+from sys import platform
 
 
 # Version is a full date, not zero-padded, 'yy.mm[.dd]', e.g.: '23.12.31'.
@@ -16,13 +17,19 @@ SETUP_FILE_WIN = PKG_NAME + "-setup"
 PROJ_HOME = dirname(dirname(realpath(__file__)))
 CTRL_DESC = "Empirix UI\n Tools for algorithmic trading by Empirix."
 DTOP_CMNT = "Tools for algorithmic trading by Empirix"
-DTOP_LOGO = "logo_empirix.xpm"
+DTOP_LOGO = f"logo-{PKG_NAME}.xpm"
 
 
 def main():
     # Start with checking/making home dir for empirix packaging process
-    bundle_home = join(expanduser("~"), "Documents", "Bundles",
-                       f"{PKG_NAME}_{VERSION}")
+    if platform == "linux":
+        bundle_home = join(expanduser("~"), "Documents", "Bundles",
+                        f"{PKG_NAME}_{VERSION}")
+    elif platform == "win32":
+        bundle_home = 0
+    elif platform == "darwin":  # OSX
+        pass  # TODO
+
     if not isdir(bundle_home):
         makedirs(bundle_home)
 
@@ -42,49 +49,49 @@ def main():
     print("Bundling with PyInstaller...")
     pyinstaller_bundle(dist_dir, work_dir, bundle_home)
 
-    # PREPARE DEBIAN SOURCE FILES
-    # Re-create home dir for DEB src stuff
-    try:
-        shutil.rmtree(deb_src_home)
-    except FileNotFoundError as e:
-        print("Unable to remove dir, doesn't exist.", e, sep='--->\n')
-    mkdir(deb_src_home)
 
-    return
+    if platform == "linux":
+        # PREPARE DEBIAN SOURCE FILES
+        # Re-create home dir for DEB src stuff
+        try:
+            shutil.rmtree(deb_src_home)
+        except FileNotFoundError as e:
+            print("Unable to remove dir, doesn't exist.", e, sep='--->\n')
+        mkdir(deb_src_home)
 
-    # Create 'control' file
-    # Read more: https://www.debian.org/doc/debian-policy/ch-controlfields.html
-    print("Creating control file...")
-    deb_ctrl_path = join(deb_src_home, "DEBIAN")
-    mkdir(deb_ctrl_path)
+        # Create 'control' file
+        # Read more: https://www.debian.org/doc/debian-policy/ch-controlfields.html
+        print("Creating control file...")
+        deb_ctrl_path = join(deb_src_home, "DEBIAN")
+        mkdir(deb_ctrl_path)
 
-    create_control_file(deb_ctrl_path, bundled_pkg_dir)
+        create_control_file(deb_ctrl_path, bundled_pkg_dir)
 
-    # Re-create usr/local/bin tree; distro in deb tree
-    dist_in_deb_tree = join(deb_src_home, "usr", "local", "bin")
-    makedirs(dist_in_deb_tree)
+        # Re-create usr/local/bin tree; distro in deb tree
+        dist_in_deb_tree = join(deb_src_home, "usr", "local", "bin")
+        makedirs(dist_in_deb_tree)
 
-    # Re-create usr/share/applications tree - for .desktop item
-    apps_dir = join(deb_src_home, "usr", "share", "applications")
-    makedirs(apps_dir)
+        # Re-create usr/share/applications tree - for .desktop item
+        apps_dir = join(deb_src_home, "usr", "share", "applications")
+        makedirs(apps_dir)
 
-    # Create .desktop item
-    print("Creating desktop item...")
-    create_desktop_item(apps_dir)
+        # Create .desktop item
+        print("Creating desktop item...")
+        create_desktop_item(apps_dir)
 
-    # Move 'dist' contents to 'empirix-trader-setup_all/usr/local/bin/...'
-    print("Moving dist contents to dist in deb tree...")
-    shutil.move(bundled_pkg_dir, dist_in_deb_tree)
+        # Move 'dist' contents to 'empirix-trader-setup_all/usr/local/bin/...'
+        print("Moving dist contents to dist in deb tree...")
+        shutil.move(bundled_pkg_dir, dist_in_deb_tree)
 
-    # Remove 'dist', 'work', .spec
-    print("Cleaning up...")
-    shutil.rmtree(dist_dir)
-    shutil.rmtree(work_dir)
-    remove(join(bundle_home, f"{PKG_NAME}.spec"))
+        # Remove 'dist', 'work', .spec
+        print("Cleaning up...")
+        shutil.rmtree(dist_dir)
+        shutil.rmtree(work_dir)
+        remove(join(bundle_home, f"{PKG_NAME}.spec"))
 
-    # BUILD .DEB PACKAGE
-    print("Building deb package...")
-    system(f"dpkg-deb --build {deb_src_home}")
+        # BUILD .DEB PACKAGE
+        print("Building deb package...")
+        system(f"dpkg-deb --build {deb_src_home}")
 
 
 def pyinstaller_bundle(dist_dir=None, work_dir=None, bundle_home=None):
@@ -104,7 +111,7 @@ def pyinstaller_bundle(dist_dir=None, work_dir=None, bundle_home=None):
             f"--specpath={bundle_home}",
 
             # Below adds data to "_internal" folder as root
-            # f"--add-data={join(PROJ_HOME, "data", "img")}:img",
+            f"--add-data={join(PROJ_HOME, "data", "logo", DTOP_LOGO)}:logo",
             # f"--hidden-import=src.my_vars.py",
             # "--debug=all",
             # "--paths=/home/rsm/Documents/MyProjects/empirix-lab/src",
@@ -119,32 +126,6 @@ def pyinstaller_bundle(dist_dir=None, work_dir=None, bundle_home=None):
             join(PROJ_HOME, "src", "main.py")  # what script to bundle
         ]
     )
-
-    # PyInstaller.__main__.run(
-    #     [
-    #         "--onedir",
-    #         "--noconfirm",
-    #         "--log-level=WARN",
-    #         f"--distpath={dist_dir}",
-    #         f"--workpath={work_dir}",
-    #         f"--specpath={bundle_home}",
-    #
-    #         # Below adds data to "_internal" folder as root
-    #         # f"--add-data={join(PROJ_HOME, "data", "img")}:img",
-    #         # f"--hidden-import=src.my_vars.py",
-    #         # "--debug=all",
-    #         # "--paths=/home/rsm/Documents/MyProjects/empirix-lab/src",
-    #         # f"--add-data={join(PROJ_HOME, "src", "widget",
-    #         #                    f"{PKG_NAME}.gresource")}:.",
-    #         f"--add-data={add_typelib("Gdk-4.0")}",
-    #         f"--add-data={add_typelib("Gsk-4.0")}",
-    #         f"--add-data={add_typelib("Gtk-4.0")}",
-    #         f"--add-data={add_typelib("Graphene-1.0")}",
-    #
-    #         f"--name={PKG_NAME}",
-    #         join(PROJ_HOME, "src", "main2.py")  # what script to bundle
-    #     ]
-    # )
 
 
 def add_typelib(typelib):
@@ -199,7 +180,7 @@ def create_desktop_item(apps_dir):
             f"Comment={DTOP_CMNT}\n"
             f"Exec=/usr/local/bin/{PKG_NAME}/{PKG_NAME}\n"
             f"TryExec=/usr/local/bin/{PKG_NAME}/{PKG_NAME}\n"
-            f"Icon=/usr/local/bin/{PKG_NAME}/_internal/img/{DTOP_LOGO}\n"
+            f"Icon=/usr/local/bin/{PKG_NAME}/_internal/logo/{DTOP_LOGO}\n"
             "Terminal=false\n"
             "Type=Application\n"
             "Categories=Finance;Math;Office;\n"
