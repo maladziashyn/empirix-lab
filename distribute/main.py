@@ -16,7 +16,10 @@ SETUP_FILE_LIN = PKG_NAME + "-setup_all"
 SETUP_FILE_WIN = PKG_NAME + "-setup"
 
 DIST_HOME = dirname(realpath(__file__))
-SPEC_FPATH = join(DIST_HOME, "main.spec")
+if platform == "linux":
+    SPEC_FPATH = join(DIST_HOME, "main.spec")
+elif platform == "win32":
+    SPEC_FPATH = join(DIST_HOME, "main.spec").replace("\\", "\\\\")
 PROJ_HOME = dirname(DIST_HOME)
 CTRL_DESC = f"{APP_NAME}\n Tools for algorithmic trading by Empirix."
 DTOP_CMNT = "Tools for algorithmic trading by Empirix"
@@ -28,14 +31,6 @@ def main():
     # Start with checking/making home dir for empirix packaging process
     bundle_home = join(expanduser("~"), "Documents", "Bundles",
                        f"{PKG_NAME}_{VERSION}")
-    # if platform == "linux":
-    #     bundle_home = join(expanduser("~"), "Documents", "Bundles",
-    #                        f"{PKG_NAME}_{VERSION}")
-    # elif platform == "win32":
-    #     bundle_home = join(expanduser("~"), "Documents", "Bundles",
-    #                        f"{PKG_NAME}_{VERSION}")
-    # elif platform == "darwin":  # OSX
-    #     pass  # TODO
 
     if not isdir(bundle_home):
         makedirs(bundle_home)
@@ -52,9 +47,13 @@ def main():
     # BUNDLE APP WITH PYINSTALLER
     print("Bundling with PyInstaller...")
 
+    if platform == "linux":
+        main_script_fpath = join(PROJ_HOME, "src", "main.py")
+    elif platform == "win32":
+        main_script_fpath = join(PROJ_HOME, "src", "main.py").replace("\\", "\\\\")
 
     spec_values = {
-        "main_script_fpath": f"{join(PROJ_HOME, "src", "main.py")}",
+        "main_script_fpath": main_script_fpath,
         "package_name": PKG_NAME,
         "hooksconfig": {"gi": {"module-versions": {"Gtk": "4.0", "Adw": "1"}}},
     }
@@ -65,9 +64,10 @@ def main():
     }
 
     # Typelibs for DEB
-    typelibs = ["Gdk-4.0", "Gsk-4.0", "Gtk-4.0", "Graphene-1.0"]
-    for typelib in typelibs:
-        datas.update(add_typelib_deb(typelib))
+    if platform == "linux":
+        typelibs = ["Gdk-4.0", "Gsk-4.0", "Gtk-4.0", "Graphene-1.0"]
+        for typelib in typelibs:
+            datas.update(add_typelib_deb(typelib))
 
     spec_values["datas"] = list(datas.items())
 
