@@ -2,7 +2,8 @@
 <gresources>
   <gresource prefix="/eu/rsmlabs/EmpirixLab">
     <file preprocess="xml-stripblanks">window.ui</file>
+    <file preprocess="xml-stripblanks">monte_carlo.ui</file>
     <file preprocess="xml-stripblanks">new_page.ui</file>
-<!--     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file> -->
+    <!--     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file> -->
   </gresource>
 </gresources>

@@ -5,7 +5,7 @@ from os import system
 from os.path import abspath, dirname, join
 
 
-IS_DEV = False  # set to False for PRODUCTION
+IS_DEV = True  # set to False for PRODUCTION
 
 APP_NAME = "empirix-lab"
 APP_ID = "eu.rsmlabs.EmpirixLab"
@@ -26,9 +26,9 @@ def init_resources():
     gresource_bin = join(HOME_GRESOURCE, f"{APP_NAME}.gresource")
 
     if IS_DEV:
-        print("COMPILING GRESOURCE")
+        # print("COMPILING GRESOURCE")
         compile_gresource(gresource_bin)
 
     # Step 2. Register
-    print("REGISTERING GRESOURCE")
+    # print("REGISTERING GRESOURCE")
     Gio.resources_register(Gio.Resource.load(gresource_bin))
