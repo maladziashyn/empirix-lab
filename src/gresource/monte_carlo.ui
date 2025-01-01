@@ -15,18 +15,15 @@
             <property name="margin_end">30</property>
             <property name="margin_bottom">30</property>
             <child>
-              <object class="MyClass" id="new_page"/>
-            </child>
-            <child>
-              <object class="AdwPreferencesGroup" id="mc_pref_group_report_layout">
+              <object class="AdwPreferencesGroup">
                 <property name="title" translatable="yes">Report Layout</property>
                 <property name="description" translatable="yes">Configure report layout and settings</property>
                 <child>
-                  <object class="AdwEntryRow" id="entry_mc_target_dir">
+                  <object class="AdwEntryRow" id="entry_target_dir">
                     <property name="title" translatable="yes">Target Directory</property>
                     <property name="show_apply_button">true</property>
                     <child type="suffix">
-                      <object class="GtkButton" id="btn_target_dir">
+                      <object class="GtkButton">
                         <property name="icon_name">folder</property>
                         <property name="has_frame">false</property>
                         <signal name="clicked" handler="btn_callback_01"/>
@@ -35,7 +32,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwSpinRow" id="spin_monte_curves_count">
+                  <object class="AdwSpinRow" id="spin_curves_count">
                     <property name="title" translatable="yes">Curves to Display</property>
                     <property name="subtitle" translatable="yes">Number of random equity curves to display</property>
                     <property name="adjustment">
@@ -50,7 +47,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwSpinRow" id="spin_monte_bins">
+                  <object class="AdwSpinRow" id="spin_bins">
                     <property name="title" translatable="yes">Bins</property>
                     <property name="subtitle" translatable="yes">How many bars on the histogram</property>
                     <property name="adjustment">
@@ -67,11 +64,11 @@
               </object>
             </child>
             <child>
-              <object class="AdwPreferencesGroup" id="mc_pref_group_sim_ruin">
+              <object class="AdwPreferencesGroup">
                 <property name="title" translatable="yes">Global Simulation Settings</property>
                 <property name="description" translatable="yes">Total simulations and risk level parameters</property>
                 <child>
-                  <object class="AdwSpinRow" id="spin_monte_simulations_count">
+                  <object class="AdwSpinRow" id="spin_simulations_count">
                     <property name="title" translatable="yes">Simulations</property>
                     <property name="subtitle" translatable="yes">How many simulations to run</property>
                     <property name="adjustment">
@@ -86,7 +83,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwSpinRow" id="spin_monte_ruin_level">
+                  <object class="AdwSpinRow" id="spin_ruin_level">
                     <property name="title" translatable="yes">Ruin Level, % of Capital</property>
                     <property name="subtitle" translatable="yes">Percentage of capital lost before quitting</property>
                     <property name="digits">2</property>
@@ -108,11 +105,11 @@
               </object>
             </child>
             <child>
-              <object class="AdwPreferencesGroup" id="mc_pref_group_sim_rand_num">
+              <object class="AdwPreferencesGroup">
                 <property name="title" translatable="yes">RANDNUM Simulation Parameters</property>
                 <property name="description" translatable="yes">Parameters of Random Number Simulations</property>
                 <child>
-                  <object class="AdwSpinRow" id="spin_monte_sim_trades">
+                  <object class="AdwSpinRow" id="spin_sim_trades">
                     <property name="title" translatable="yes">Trades Count</property>
                     <property name="subtitle" translatable="yes">How many trades in one simulation</property>
                     <property name="adjustment">
@@ -127,7 +124,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwSpinRow" id="spin_monte_sim_years">
+                  <object class="AdwSpinRow" id="spin_sim_years">
                     <property name="title" translatable="yes">Years</property>
                     <property name="subtitle" translatable="yes">Time window of a simulation in years</property>
                     <property name="digits">2</property>
@@ -142,7 +139,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwSpinRow" id="spin_monte_sim_win_rate">
+                  <object class="AdwSpinRow" id="spin_sim_win_rate">
                     <property name="title" translatable="yes">Win Rate, %</property>
                     <property name="subtitle" translatable="yes">Percentage of winning trades</property>
                     <property name="digits">2</property>
@@ -157,7 +154,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwSpinRow" id="spin_monte_sim_win_loss_ratio">
+                  <object class="AdwSpinRow" id="spin_sim_win_loss_ratio">
                     <property name="title" translatable="yes">Win/Loss Ratio</property>
                     <property name="subtitle" translatable="yes">Ratio of Average Winner to Average Losing Trade</property>
                     <property name="digits">4</property>
@@ -172,7 +169,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwSpinRow" id="spin_monte_sim_fraction">
+                  <object class="AdwSpinRow" id="spin_sim_fraction">
                     <property name="title" translatable="yes">Fraction, %</property>
                     <property name="subtitle" translatable="yes">Percentage of capital risked per trade</property>
                     <property name="digits">2</property>
@@ -189,12 +186,13 @@
               </object>
             </child>
             <child>
-              <object class="GtkButton" id="btn_monte_sim_rand_num">
+              <object class="GtkButton">
                 <property name="label" translatable="yes">Run RANDNUM Simulation</property>
                 <property name="halign">center</property>
                 <property name="width-request">270</property>
                 <property name="height-request">40</property>
                 <property name="tooltip-text">Simulate</property>
+                <signal name="clicked" handler="btn_callback_02"/>
                 <style>
                   <class name="suggested-action"/>
                 </style>
