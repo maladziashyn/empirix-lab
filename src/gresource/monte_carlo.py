@@ -2,6 +2,9 @@ import gi
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk
 
+from monte_carlo.monte_carlo import build_one_curve
+
+
 
 @Gtk.Template(resource_path="/eu/rsmlabs/EmpirixLab/monte_carlo.ui")
 class MonteCarloScrolledWindow(Gtk.ScrolledWindow):
@@ -53,6 +56,13 @@ class MonteCarloScrolledWindow(Gtk.ScrolledWindow):
         print(self.spin_sim_win_rate.get_text())
         print(self.spin_sim_win_loss_ratio.get_text())
         print(self.spin_sim_fraction.get_text())
+
+        trades = self.spin_sim_trades.get_text()
+        win_rate = self.spin_sim_win_rate.get_text()
+        wl_ratio = self.spin_sim_win_loss_ratio.get_text()
+        fraction = self.spin_sim_fraction.get_text()
+
+        print(build_one_curve(trades, win_rate, wl_ratio, fraction))
 
         # # self.en_directory.set_text(c.PROJ_SRC)
         # # print(self.entry_mc_target_dir.get_text())
