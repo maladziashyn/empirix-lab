@@ -1,15 +1,19 @@
-import PyInstaller.__main__
 import shutil
 
 from jinja2 import Template
 from math import ceil
-from os import makedirs, mkdir, remove, system, walk
+from os import makedirs, mkdir, system, walk
 from os.path import dirname, expanduser, getsize, isdir, join, realpath
-from sys import platform
+from sys import platform, path
+
+prj_home = dirname(dirname(realpath(__file__)))
+if prj_home not in path:
+    path.append(prj_home)
+from src.gresource.init_gresource import IS_DEV
 
 
 # Version is a full date, not zero-padded, 'yy.mm[.dd]', e.g.: '23.12.31'.
-VERSION = '24.12.1'
+VERSION = '25.1'
 APP_NAME = 'Empirix Lab'
 PKG_NAME = 'empirix-lab'
 SETUP_FILE_LIN = PKG_NAME + "-setup_all"
@@ -56,6 +60,7 @@ def main():
         "main_script_fpath": main_script_fpath,
         "package_name": PKG_NAME,
         "hooksconfig": {"gi": {"module-versions": {"Gtk": "4.0", "Adw": "1"}}},
+        "is_console": IS_DEV,
     }
 
     datas = {
@@ -155,8 +160,8 @@ def add_typelib_deb(typelib):
     ImportError: Typelib file for namespace 'Gtk', version '4.0' not found.
     windows girepository path = "C:\\gtk\\lib\\girepository-1.0"
     """
+    
     deb_girepository = "/usr/lib/x86_64-linux-gnu/girepository-1.0"
-    win_girepository = "C:\\gtk\\lib\\girepository-1.0"
     return {join(deb_girepository, typelib + ".typelib"): "./gi_typelibs"}
     # return {f"/usr/lib/x86_64-linux-gnu/girepository-1.0/{typelib}.typelib": "./gi_typelibs"}
 

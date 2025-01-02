@@ -5,7 +5,7 @@ from os import system
 from os.path import abspath, dirname, join
 
 
-IS_DEV = True  # set to False for PRODUCTION
+IS_DEV = False  # set to False for PRODUCTION
 
 APP_NAME = "empirix-lab"
 APP_ID = "eu.rsmlabs.EmpirixLab"
