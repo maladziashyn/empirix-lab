@@ -2,11 +2,12 @@ import gi
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk
 
-from monte_carlo.monte_carlo import build_one_curve
+from config import APP_URL
+
+from core.monte_carlo import build_one_curve
 
 
-
-@Gtk.Template(resource_path="/eu/rsmlabs/EmpirixLab/monte_carlo.ui")
+@Gtk.Template(resource_path=f"{APP_URL}/monte_carlo.ui")
 class MonteCarloScrolledWindow(Gtk.ScrolledWindow):
     __gtype_name__ = "MonteCarloScrolledWindow"
 
