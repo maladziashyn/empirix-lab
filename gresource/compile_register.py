@@ -21,12 +21,14 @@ def gresource_compile():
         f"--target {c.GRESOURCE_BIN} " \
         f"{c.GRESOURCE_XML}"
     )
-    print("GRESOURCE COMPILED")
+    # print("GRESOURCE COMPILED")
 
 
 def gresource_register():
     Gio.resources_register(Gio.Resource.load(c.GRESOURCE_BIN))
 
 
-gresource_compile()
+if c.GRESOURCE_RECOMPILE:
+    gresource_compile()
+
 gresource_register()

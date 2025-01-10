@@ -16,7 +16,7 @@ if project_home not in path:
 def main():
 
     file_list = []
-    exclude = set(["venv", "icons", "logo"])
+    exclude = set(["venv", "icons", "logo", ".git", "__pycache__"])
     for root, dirs, files in walk(project_home):
         dirs[:] = [d for d in dirs if d not in exclude]
         for file in files:

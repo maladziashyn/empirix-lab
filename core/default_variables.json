@@ -1,0 +1,50 @@
+{
+  "data_types": {
+    "0": "int_val",
+    "1": "real_val",
+    "2": "text_val",
+    "3": "blob_val"
+  },
+  "default_values": {
+    "target_dir": {
+      "data_type": "2",
+      "value": "/home"
+    },
+    "curves_count": {
+      "data_type": "0",
+      "value": 15
+    },
+    "bins": {
+      "data_type": "0",
+      "value": 20
+    },
+    "simulations_count": {
+      "data_type": "0",
+      "value": 300
+    },
+    "ruin_level": {
+      "data_type": "1",
+      "value": 30.0
+    },
+    "sim_trades": {
+      "data_type": "0",
+      "value": 20
+    },
+    "sim_years": {
+      "data_type": "1",
+      "value": 5.0
+    },
+    "sim_win_rate": {
+      "data_type": "1",
+      "value": 36.0
+    },
+    "sim_win_loss_ratio": {
+      "data_type": "1",
+      "value": 1.75
+    },
+    "sim_fraction": {
+      "data_type": "1",
+      "value": 0.008
+    }
+  }
+}

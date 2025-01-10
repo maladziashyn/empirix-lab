@@ -9,7 +9,7 @@ PROJECT_HOME_DIR = dirname(realpath(__file__))
 APP_NAME = "Empirix Lab"
 APP_COPYRIGHT = "© 2025 Raman Maładziašyn"
 APP_DEV_NAME = "Raman Maładziašyn"
-APP_DEVS = ["Raman Maładziašyn", "Arciom Kośmin"]
+APP_DEVS = ["Raman Maładziašyn"]
 
 # Distribution
 VERSION = "25.1"
@@ -23,5 +23,5 @@ DESKTOP_ITEM_LOGO = f"{PACKAGE_NAME}.xpm"
 APP_ID = "eu.rsmlabs.EmpirixLab"
 APP_URL = "/eu/rsmlabs/EmpirixLab"
 GRESOURCE_HOME_DIR = join(PROJECT_HOME_DIR, "gresource")
-GRESOURCE_XML = join(GRESOURCE_HOME_DIR, f"{PACKAGE_NAME}.gresource.xml")
 GRESOURCE_BIN = join(GRESOURCE_HOME_DIR, f"{PACKAGE_NAME}.gresource")
+GRESOURCE_XML = GRESOURCE_BIN + ".xml"
