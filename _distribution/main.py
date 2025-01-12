@@ -76,21 +76,12 @@ def main():
     # BUNDLE
     pyinstaller_bundle(spec_values, dist_dir, work_dir)
 
-    # Move dist data to bundles_home
-    # shutil.move(join(dist_dir, versioned_dirname), target_dirpath)
-    # shutil.move(dist_dir, target_dirpath)
-
     if platform == "win32":
-        pass
-
-        # # clean up
-        # print("Cleaning up...")
-        # shutil.rmtree(dist_dir)
-        # shutil.rmtree(work_dir)
-        #
-        # print("Zipping...")
-        # shutil.make_archive(join(bundles_home, f"{c.PACKAGE_NAME}_{c.VERSION}"), "zip", target_dir)
-        # print("Build complete")
+        # Move dist data to bundles_home
+        shutil.move(join(dist_dir, c.PACKAGE_NAME), target_dirpath)
+        shutil.move(dist_dir, target_dirpath)
+        print("Zipping...")
+        shutil.make_archive(join(bundles_home, f"{c.PACKAGE_NAME}_{c.VERSION}"), "zip", target_dirpath)
     elif platform == "linux":
         # Place for all debian source stuff: dir empirix-ui-setup_all
         deb_src_home = join(target_dirpath, c.SETUP_FILE_LINUX)
@@ -134,11 +125,11 @@ def main():
         print("Building deb package...")
         system(f"dpkg-deb --build {deb_src_home}")
 
-    #     # Remove 'dist', 'work', .spec
-    #     print("Cleaning up...")
-    #     shutil.rmtree(dist_dir)
-    #     shutil.rmtree(work_dir)
-    #     # remove(join(bundle_home, f"{PKG_NAME}.spec"))
+    # Remove 'dist', 'work'
+    print("Cleaning up...")
+    shutil.rmtree(dist_dir)
+    shutil.rmtree(work_dir)
+
     print("Packaging complete.")
 
 
