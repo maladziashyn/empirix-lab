@@ -17,7 +17,10 @@ PACKAGE_NAME = "empirix-lab"
 CONTROL_FILE_DESC = f"{APP_NAME}\n Tools for algorithmic trading by Empirix."
 DESKTOP_ITEM_COMMENT = "Tools for algorithmic trading by Empirix"
 DESKTOP_ITEM_LOGO = f"{PACKAGE_NAME}.xpm"
-# SPEC_JINJA_TPL_FPATH = join(DIST_HOME, "tpl.jinja")
+MAINTAINER = "Raman Maładziašyn <maladziashyn@gmail.com>"
+WEB_HOMEPAGE = "https://empirix.ru/"
+SETUP_FILE_LINUX = f"{PACKAGE_NAME}-{VERSION}-setup_all"
+SETUP_FILE_WINDOWS = f"{PACKAGE_NAME}-{VERSION}-setup"
 
 # GResource
 APP_ID = "eu.rsmlabs.EmpirixLab"
