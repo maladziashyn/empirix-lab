@@ -1,5 +1,5 @@
-import json
-import sqlite3
+# import json
+# import sqlite3
 
 
 DB_FNAME = "empirix_variables.db"
@@ -19,8 +19,9 @@ CREATE TABLE IF NOT EXISTS {TBL_NAME}(
 
 
 def main():
-    with open(DEFAULT_VARS_JSON, "r") as f:
-        devault_vars = json.load(f)
+    pass
+    # with open(DEFAULT_VARS_JSON, "r") as f:
+    #     devault_vars = json.load(f)
 
 
 if __name__ == "__main__":

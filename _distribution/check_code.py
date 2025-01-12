@@ -14,6 +14,7 @@ if project_home not in path:
 
 
 def main():
+    print("Checking code...\n")
 
     file_list = []
     exclude = set(["venv", "icons", "logo", ".git", "__pycache__"])
