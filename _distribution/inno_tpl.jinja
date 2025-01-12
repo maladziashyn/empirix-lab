@@ -1,0 +1,45 @@
+#define MyAppName "{{ app_name }}"
+#define MyAppVersion "{{ app_version }}"
+#define MyAppPublisher "{{ app_publisher }}"
+#define MyAppURL "{{ app_url }}"
+#define MyAppExeName "{{ app_executable }}"
+
+[Setup]
+AppId={{ app_guid }}
+AppName={{ hash_my_app_name }}
+AppVersion={{ hash_my_app_version }}
+AppPublisher={{ hash_my_app_publisher }}
+AppPublisherURL={{ hash_my_app_url }}
+AppSupportURL={{ hash_my_app_url }}
+AppUpdatesURL={{ hash_my_app_url }}
+DefaultDirName={autopf}\{{ app_name }}
+UninstallDisplayIcon={app}\{{ hash_my_app_exe_name }}
+ArchitecturesAllowed=x64compatible
+ArchitecturesInstallIn64BitMode=x64compatible
+DefaultGroupName={{ hash_my_app_name }}
+AllowNoIcons=yes
+LicenseFile={{ license_fpath }}
+;PrivilegesRequired=lowest
+OutputDir={{ output_dir }}
+OutputBaseFilename={{ output_base_filename }}
+;SetupIconFile={{ setup_icon_file }}
+SolidCompression=yes
+WizardStyle=modern
+
+[Languages]
+Name: "english"; MessagesFile: "compiler:Default.isl"
+
+[Tasks]
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+
+[Files]
+Source: "{{ installed_files_homedir }}\{{ hash_my_app_exe_name }}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{{ installed_files_internal }}\*"; DestDir: "{app}/{{ internal_dir }}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+[Icons]
+Name: "{group}\{{ hash_my_app_name }}"; Filename: "{app}\{{ hash_my_app_exe_name }}"
+Name: "{group}\{cm:UninstallProgram,{{ hash_my_app_name }}}"; Filename: "{uninstallexe}"
+Name: "{autodesktop}\{{ hash_my_app_name }}"; Filename: "{app}\{{ hash_my_app_exe_name }}"; Tasks: desktopicon
+
+[Run]
+Filename: "{app}\{{ hash_my_app_exe_name }}"; Description: "{cm:LaunchProgram,{{ hash_string_change }}(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent

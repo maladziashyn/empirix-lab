@@ -15,5 +15,5 @@ class AppWindow(Adw.ApplicationWindow):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.set_icon_name(APP_ID)
+        # self.set_icon_name(APP_ID)
         self.set_title(APP_NAME)

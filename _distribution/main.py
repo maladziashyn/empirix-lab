@@ -53,10 +53,13 @@ def main():
         "package_name": c.PACKAGE_NAME,
         "hooksconfig": {"gi": {"module-versions": {"Gtk": "4.0", "Adw": "1"}}},
         "is_console": IS_CONSOLE,
+        "icon_path": join(c.PROJECT_HOME_DIR, "_distribution", "logo", c.PACKAGE_NAME + ".ico").replace("\\", "\\\\"),
     }
+    
     datas = {
         join(c.PROJECT_HOME_DIR, "gresource",
              f"{c.PACKAGE_NAME}.gresource"): "./gresource",
+        # join(c.PROJECT_HOME_DIR, "_distribution", "logo", c.PACKAGE_NAME + ".ico"): "./logo",
     }
     if platform == "linux":
         # Add XPM logo for Linux desktop-item
@@ -82,11 +85,16 @@ def main():
             makedirs(target_dirpath)
         # Move dist data to bundles_home
         shutil.move(join(dist_dir, c.PACKAGE_NAME), target_dirpath)
-        # shutil.move(dist_dir, target_dirpath)
-        print("Zipping...")
-        shutil.make_archive(target_dirpath, "zip", target_dirpath)
-        # Move zip into versioned dir
-        shutil.move(target_dirpath + ".zip", target_dirpath)
+        
+        ## Optional - zip
+        # print("Zipping...")
+        # shutil.make_archive(target_dirpath, "zip", target_dirpath)
+        # # Move zip into versioned dir
+        # shutil.move(target_dirpath + ".zip", target_dirpath)
+        
+        # Generate inno setup script
+        generate_inno_script(target_dirpath)
+        
     elif platform == "linux":
         # Place for all debian source stuff: dir empirix-ui-setup_all
         deb_src_home = join(target_dirpath, c.SETUP_FILE_LINUX)
@@ -136,6 +144,40 @@ def main():
     shutil.rmtree(work_dir)
 
     print("Packaging complete.")
+
+
+def generate_inno_script(target_dirpath):
+    inno_values = {
+        "app_name": c.APP_NAME,
+        "app_version": c.VERSION,
+        "app_publisher": "Empirix.ru",
+        "app_url": c.WEB_HOMEPAGE,
+        "app_executable": f"{c.PACKAGE_NAME}.exe",
+        "license_fpath": join(c.PROJECT_HOME_DIR, "LICENSE"),
+        "output_dir": target_dirpath,
+        "output_base_filename": c.SETUP_FILE_WINDOWS,
+        "installed_files_homedir": join(target_dirpath, c.PACKAGE_NAME),
+        "installed_files_internal": join(target_dirpath, c.PACKAGE_NAME, c.INTERNAL_DIR),
+        "internal_dir": c.INTERNAL_DIR,
+        "hash_my_app_name": "{#MyAppName}",
+        "hash_my_app_version": "{#MyAppVersion}",
+        "hash_my_app_publisher": "{#MyAppPublisher}",
+        "hash_my_app_url": "{#MyAppURL}",
+        "hash_my_app_exe_name": "{#MyAppExeName}",
+        "hash_string_change": "{#StringChange",
+        "app_guid": "{{41EAD664-F1A8-435A-98D9-0A644A6E7AC2}"
+    }
+    
+    # Generate .iss file
+    with open(join(project_home_dir, "_distribution", "inno_tpl.jinja"), "r") as f:
+        template = Template(f.read())
+
+    inno_content = template.render(**inno_values)
+
+    # Save the generated .spec file
+    inno_file = join(project_home_dir, "_distribution", "inno_setup_script.iss")
+    with open(inno_file, "w") as f_out:
+        f_out.write(inno_content)
 
 
 def pyinstaller_bundle(spec_values, dist_dir, work_dir):

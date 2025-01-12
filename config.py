@@ -21,6 +21,7 @@ MAINTAINER = "Raman Maładziašyn <maladziashyn@gmail.com>"
 WEB_HOMEPAGE = "https://empirix.ru/"
 SETUP_FILE_LINUX = f"{PACKAGE_NAME}-{VERSION}-setup_all"
 SETUP_FILE_WINDOWS = f"{PACKAGE_NAME}-{VERSION}-setup"
+INTERNAL_DIR = "_internal"
 
 # GResource
 APP_ID = "eu.rsmlabs.EmpirixLab"
