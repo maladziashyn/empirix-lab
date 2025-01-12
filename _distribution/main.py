@@ -13,7 +13,7 @@ if project_home_dir not in path:
 import config as c
 
 
-IS_CONSOLE = True
+IS_CONSOLE = False
 
 
 def main():
@@ -75,13 +75,18 @@ def main():
 
     # BUNDLE
     pyinstaller_bundle(spec_values, dist_dir, work_dir)
-
+    
     if platform == "win32":
+        # Recreate target dirpath
+        if not isdir(target_dirpath):
+            makedirs(target_dirpath)
         # Move dist data to bundles_home
         shutil.move(join(dist_dir, c.PACKAGE_NAME), target_dirpath)
-        shutil.move(dist_dir, target_dirpath)
+        # shutil.move(dist_dir, target_dirpath)
         print("Zipping...")
-        shutil.make_archive(join(bundles_home, f"{c.PACKAGE_NAME}_{c.VERSION}"), "zip", target_dirpath)
+        shutil.make_archive(target_dirpath, "zip", target_dirpath)
+        # Move zip into versioned dir
+        shutil.move(target_dirpath + ".zip", target_dirpath)
     elif platform == "linux":
         # Place for all debian source stuff: dir empirix-ui-setup_all
         deb_src_home = join(target_dirpath, c.SETUP_FILE_LINUX)
@@ -139,7 +144,9 @@ def pyinstaller_bundle(spec_values, dist_dir, work_dir):
     Read more: https://pyinstaller.org/en/stable/usage.html
     https://pyinstaller.org/en/stable/runtime-information.html
     """
-
+    
+    print("Running PyInstaller...")
+    
     # Generate .spec file
     with open(join(project_home_dir, "_distribution", "tpl.jinja"), "r") as f:
         template = Template(f.read())
