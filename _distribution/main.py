@@ -19,6 +19,13 @@ IS_CONSOLE = True
 def main():
     print(f"Packaging \"{c.APP_NAME}\"...")
 
+    # Check gresource recompile flag
+    with open(join(c.PROJECT_HOME_DIR, "config.py"), "r") as f:
+        config_content = f.read()
+    if "GRESOURCE_RECOMPILE = True" in config_content:
+        print("[BLOCKER] config.py: set GRESOURCE_RECOMPILE to False.")
+        return
+
     # Start with checking/making home dir for packaging process
     bundles_home = join(expanduser("~"), "Documents", "Bundles")
 
