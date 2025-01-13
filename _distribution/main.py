@@ -59,7 +59,7 @@ def main():
     datas = {
         join(c.PROJECT_HOME_DIR, "gresource",
              f"{c.PACKAGE_NAME}.gresource"): "./gresource",
-        # join(c.PROJECT_HOME_DIR, "_distribution", "logo", c.PACKAGE_NAME + ".ico"): "./logo",
+        join(c.PROJECT_HOME_DIR, "_distribution", "logo", c.PACKAGE_NAME + ".ico"): "./",
     }
     if platform == "linux":
         # Add XPM logo for Linux desktop-item
