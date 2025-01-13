@@ -93,7 +93,11 @@ def main():
         # shutil.move(target_dirpath + ".zip", target_dirpath)
         
         # Generate inno setup script
-        generate_inno_script(target_dirpath)
+        inno_fpath = generate_inno_script(target_dirpath)
+        
+        # run inno script
+        print("Producing installer file with Inno Setup...")
+        system(f"iscc /Q {inno_fpath}")
         
     elif platform == "linux":
         # Place for all debian source stuff: dir empirix-ui-setup_all
@@ -174,10 +178,12 @@ def generate_inno_script(target_dirpath):
 
     inno_content = template.render(**inno_values)
 
-    # Save the generated .spec file
+    # Save the generated .iss file
     inno_file = join(project_home_dir, "_distribution", "inno_setup_script.iss")
     with open(inno_file, "w") as f_out:
         f_out.write(inno_content)
+    
+    return inno_file
 
 
 def pyinstaller_bundle(spec_values, dist_dir, work_dir):
