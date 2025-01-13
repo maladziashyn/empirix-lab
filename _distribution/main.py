@@ -53,13 +53,11 @@ def main():
         "package_name": c.PACKAGE_NAME,
         "hooksconfig": {"gi": {"module-versions": {"Gtk": "4.0", "Adw": "1"}}},
         "is_console": IS_CONSOLE,
-        "icon_path": join(c.PROJECT_HOME_DIR, "_distribution", "logo", c.PACKAGE_NAME + ".ico").replace("\\", "\\\\"),
     }
     
     datas = {
         join(c.PROJECT_HOME_DIR, "gresource",
              f"{c.PACKAGE_NAME}.gresource"): "./gresource",
-        join(c.PROJECT_HOME_DIR, "_distribution", "logo", c.PACKAGE_NAME + ".ico"): "./",
     }
     if platform == "linux":
         # Add XPM logo for Linux desktop-item
@@ -73,7 +71,16 @@ def main():
         typelibs = ["Gdk-4.0", "Gsk-4.0", "Gtk-4.0", "Graphene-1.0"]
         for typelib in typelibs:
             datas.update(add_typelib(typelib))
+    elif platform == "win32":
+        # In Windows, add icon for .exe, used by PyInstaller
+        spec_values.update(
+            {"icon_path": join(c.PROJECT_HOME_DIR, "_distribution", "logo", c.PACKAGE_NAME + ".ico").replace("\\", "\\\\")}
+        )
+        datas.update(
+            {join(c.PROJECT_HOME_DIR, "_distribution", "logo", c.PACKAGE_NAME + ".ico"): "./"}
+        )
 
+    # Finalize spec values by ading datas
     spec_values["datas"] = list(datas.items())
 
     # BUNDLE
@@ -95,25 +102,24 @@ def main():
         # Generate inno setup script
         inno_fpath = generate_inno_script(target_dirpath)
         
-        # run inno script
+        # CREATE WINDOWS INSTALLER
         print("Producing installer file with Inno Setup...")
-        system(f"iscc /Q {inno_fpath}")
+        system(f"iscc /Q {inno_fpath}")  # in quiet mode
         
     elif platform == "linux":
         # Place for all debian source stuff: dir empirix-ui-setup_all
         deb_src_home = join(target_dirpath, c.SETUP_FILE_LINUX)
 
         # Re-create home dir for DEB src stuff
-        try:
-            shutil.rmtree(deb_src_home)
-        except FileNotFoundError as e:
-            print(f"Unable to remove directory, doesn't exist.", e, sep='--->\n')
+        # try:
+        #     shutil.rmtree(deb_src_home)
+        # except FileNotFoundError as e:
+        #     print(f"Unable to remove directory, doesn't exist.", e, sep='--->\n')
         makedirs(deb_src_home)
 
         # PREPARE DEBIAN SOURCE FILES
         # Bundled package directory, like for real: dist/empirix-ui
         bundled_pkg_dir = join(dist_dir, c.PACKAGE_NAME)
-
 
         # Create 'control' file
         # Read more: https://www.debian.org/doc/debian-policy/ch-controlfields.html
