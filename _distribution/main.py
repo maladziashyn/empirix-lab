@@ -166,6 +166,7 @@ def generate_inno_script(target_dirpath):
         "license_fpath": join(c.PROJECT_HOME_DIR, "LICENSE"),
         "output_dir": target_dirpath,
         "output_base_filename": c.SETUP_FILE_WINDOWS,
+        "setup_icon_file": join(c.PROJECT_HOME_DIR, "_distribution", "logo", c.PACKAGE_NAME + ".ico"),
         "installed_files_homedir": join(target_dirpath, c.PACKAGE_NAME),
         "installed_files_internal": join(target_dirpath, c.PACKAGE_NAME, c.INTERNAL_DIR),
         "internal_dir": c.INTERNAL_DIR,
