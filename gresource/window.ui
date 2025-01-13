@@ -66,21 +66,21 @@
   </template>
   <menu id="primary_menu">
     <section>
-      <item>
+<!--      <item>
         <attribute name="label" translatable="yes">_Save as...</attribute>
-        <!--        <attribute name="action">win.save-as</attribute>-->
-      </item>
-      <item>
+        <attribute name="action">win.save-as</attribute>
+      </item>-->
+<!--      <item>
         <attribute name="label" translatable="yes">_Preferences</attribute>
-               <attribute name="action">app.preferences</attribute>
+        <attribute name="action">app.preferences</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Keyboard Shortcuts</attribute>
-               <attribute name="action">win.show-help-overlay</attribute>
-      </item>
+        <attribute name="action">win.show-help-overlay</attribute>
+      </item>-->
       <item>
-        <attribute name="label" translatable="yes">_About Empirix UI</attribute>
-               <attribute name="action">app.about</attribute>
+        <attribute name="label" translatable="yes">_About</attribute>
+        <attribute name="action">app.about</attribute>
       </item>
     </section>
   </menu>

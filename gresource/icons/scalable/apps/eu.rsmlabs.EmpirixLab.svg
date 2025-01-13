@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
-  <!-- Gradient background -->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
   <defs>
-    <linearGradient id="gradient" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#8952BF" />
-      <stop offset="100%" stop-color="#52BF89" />
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1775E1" />
+      <stop offset="100%" stop-color="#171717" />
     </linearGradient>
   </defs>
-  <rect x="0" y="0" width="200" height="200" fill="url(#gradient)" />
-
-  <!-- Letter E -->
-  <rect x="60" y="50" width="80" height="20" fill="#FFFFFF" />
-  <rect x="60" y="90" width="80" height="20" fill="#FFFFFF" />
-  <rect x="60" y="130" width="80" height="20" fill="#FFFFFF" />
+  <rect width="512" height="512" rx="120" ry="120" fill="url(#grad1)"/>
+  <text x="40" y="445" fill="white" font-size="240" font-weight="bolder" font-family="Arial, Helvetica">lab</text>
 </svg>
