@@ -160,7 +160,7 @@ def main():
 def generate_inno_script(target_dirpath):
     inno_values = {
         "app_name": c.APP_NAME,
-        "app_icon_name": f"{c.PACKAGE_NAME}.ico"
+        "app_icon_name": f"{c.PACKAGE_NAME}.ico",
         "app_version": c.VERSION,
         "app_publisher": "Empirix.ru",
         "app_url": c.WEB_HOMEPAGE,
