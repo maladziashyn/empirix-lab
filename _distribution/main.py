@@ -74,6 +74,7 @@ def main():
     elif platform == "win32":
         # In Windows, add icon for .exe, used by PyInstaller
         spec_values.update(
+            # {"icon_path": join(c.PROJECT_HOME_DIR, "_distribution", "logo", c.PACKAGE_NAME + ".ico").replace("\\", "\\\\")}
             {"icon_path": join(c.PROJECT_HOME_DIR, "_distribution", "logo", c.PACKAGE_NAME + ".ico").replace("\\", "\\\\")}
         )
         datas.update(
@@ -159,6 +160,7 @@ def main():
 def generate_inno_script(target_dirpath):
     inno_values = {
         "app_name": c.APP_NAME,
+        "app_icon_name": f"{c.PACKAGE_NAME}.ico"
         "app_version": c.VERSION,
         "app_publisher": "Empirix.ru",
         "app_url": c.WEB_HOMEPAGE,
@@ -171,6 +173,7 @@ def generate_inno_script(target_dirpath):
         "installed_files_internal": join(target_dirpath, c.PACKAGE_NAME, c.INTERNAL_DIR),
         "internal_dir": c.INTERNAL_DIR,
         "hash_my_app_name": "{#MyAppName}",
+        "hash_my_app_icon_name": "{#MyAppIconName}",
         "hash_my_app_version": "{#MyAppVersion}",
         "hash_my_app_publisher": "{#MyAppPublisher}",
         "hash_my_app_url": "{#MyAppURL}",

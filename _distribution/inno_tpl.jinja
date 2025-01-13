@@ -3,6 +3,7 @@
 #define MyAppPublisher "{{ app_publisher }}"
 #define MyAppURL "{{ app_url }}"
 #define MyAppExeName "{{ app_executable }}"
+#define MyAppIconName "{{ app_icon_name }}"
 
 [Setup]
 AppId={{ app_guid }}
@@ -19,10 +20,10 @@ ArchitecturesInstallIn64BitMode=x64compatible
 DefaultGroupName={{ hash_my_app_name }}
 AllowNoIcons=yes
 LicenseFile={{ license_fpath }}
-;PrivilegesRequired=lowest
+PrivilegesRequired=lowest
 OutputDir={{ output_dir }}
 OutputBaseFilename={{ output_base_filename }}
-SetupIconFile={{ setup_icon_file }}
+;SetupIconFile={{ setup_icon_file }}
 SolidCompression=yes
 WizardStyle=modern
 
@@ -39,7 +40,7 @@ Source: "{{ installed_files_internal }}\*"; DestDir: "{app}/{{ internal_dir }}";
 [Icons]
 Name: "{group}\{{ hash_my_app_name }}"; Filename: "{app}\{{ hash_my_app_exe_name }}"
 Name: "{group}\{cm:UninstallProgram,{{ hash_my_app_name }}}"; Filename: "{uninstallexe}"
-Name: "{autodesktop}\{{ hash_my_app_name }}"; Filename: "{app}\{{ hash_my_app_exe_name }}"; Tasks: desktopicon
+Name: "{autodesktop}\{{ hash_my_app_name }}"; Filename: "{app}\{{ hash_my_app_exe_name }}"; Tasks: desktopicon; IconFilename: "{app}\{{ internal_dir }}\{{ hash_my_app_icon_name }}"
 
 [Run]
 Filename: "{app}\{{ hash_my_app_exe_name }}"; Description: "{cm:LaunchProgram,{{ hash_string_change }}(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
