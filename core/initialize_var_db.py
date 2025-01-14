@@ -2,9 +2,9 @@
 # import sqlite3
 
 
-DB_FNAME = "empirix_variables.db"
+DB_FNAME = "empirix_var.db"
 DEFAULT_VARS_JSON = "default_variables.json"
-TBL_NAME = "empirix_variables"
+TBL_NAME = "empirix_var"
 QRY_CREATE = f"""
 DROP TABLE IF EXISTS {TBL_NAME};
 CREATE TABLE IF NOT EXISTS {TBL_NAME}(
@@ -12,8 +12,7 @@ CREATE TABLE IF NOT EXISTS {TBL_NAME}(
     data_type TEXT,
     int_val INTEGER,
     real_val REAL,
-    text_val TEXT,
-    blob_val BLOB
+    text_val TEXT
 );
 """
 

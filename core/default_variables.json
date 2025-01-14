@@ -6,9 +6,9 @@
     "3": "blob_val"
   },
   "default_values": {
-    "target_dir": {
+    "work_dir": {
       "data_type": "2",
-      "value": "/home"
+      "value": "~/Documents/EmpirixLab"
     },
     "curves_count": {
       "data_type": "0",
