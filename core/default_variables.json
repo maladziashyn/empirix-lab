@@ -2,8 +2,7 @@
   "data_types": {
     "0": "int_val",
     "1": "real_val",
-    "2": "text_val",
-    "3": "blob_val"
+    "2": "text_val"
   },
   "default_values": {
     "work_dir": {

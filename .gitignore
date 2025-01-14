@@ -1,20 +1,20 @@
+# Python virtual environment
+venv/
+
+# Byte-compiled
+__pycache__/
+
+# Credentials, python-dotenv
+*.env
+
+# GTK4
 *.gresource
 
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
-
 # PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
 *.spec
-
-# Environments
-.env
-.venv
-venv/
 
 # Inno setup
 *.iss
+
+# In-app: slite db
+*.db

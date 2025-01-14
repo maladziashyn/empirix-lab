@@ -64,6 +64,10 @@ class MyApp(Adw.Application):
 def main():
     """The application's entry point."""
 
+    # Initialize var db
+    # TODO
+
+    # Show main window
     app = MyApp()
     app.run(None)
 
