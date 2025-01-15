@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="Adw" version="1.0"/>
+  <template class="SanityCheckScrolledWindow" parent="GtkScrolledWindow">
+    <child>
+      <object class="AdwClamp">
+        <property name="maximum_size">600</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="spacing">30</property>
+            <property name="margin_start">30</property>
+            <property name="margin_top">30</property>
+            <property name="margin_end">30</property>
+            <property name="margin_bottom">30</property>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Configuration</property>
+<!--                 <property name="description" translatable="yes">Configure report layout and settings</property> -->
+                <child>
+                  <object class="AdwEntryRow" id="entry_source_dir">
+                    <property name="title" translatable="yes">Source Directory</property>
+                    <property name="show_apply_button">true</property>
+                    <child type="suffix">
+                      <object class="GtkButton">
+                        <property name="icon_name">folder</property>
+                        <property name="has_frame">false</property>
+                        <signal name="clicked" handler="btn_callback_01"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                    <object class="AdwSwitchRow" id="switch_show_on_end">
+                        <property name="title" translatable="yes">Show report</property>
+                        <property name="subtitle" translatable="yes">Open report in Excel after completion</property>
+                        <property name="active">true</property>
+                    </object>
+                </child>
+
+
+                <child>
+                  <object class="AdwSpinRow" id="spin_curves_count">
+                    <property name="title" translatable="yes">Curves to Display</property>
+                    <property name="subtitle" translatable="yes">Number of random equity curves to display</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">1</property>
+                        <property name="upper">100</property>
+                        <property name="value">15</property>
+                        <property name="step-increment">1</property>
+                        <property name="page-increment">10</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSpinRow" id="spin_bins">
+                    <property name="title" translatable="yes">Bins</property>
+                    <property name="subtitle" translatable="yes">How many bars on the histogram</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">2</property>
+                        <property name="upper">200</property>
+                        <property name="value">20</property>
+                        <property name="step-increment">1</property>
+                        <property name="page-increment">10</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Global Simulation Settings</property>
+                <property name="description" translatable="yes">Total simulations and risk level parameters</property>
+                <child>
+                  <object class="AdwSpinRow" id="spin_simulations_count">
+                    <property name="title" translatable="yes">Simulations</property>
+                    <property name="subtitle" translatable="yes">How many simulations to run</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">10</property>
+                        <property name="upper">10000</property>
+                        <property name="value">300</property>
+                        <property name="step-increment">10</property>
+                        <property name="page-increment">100</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSpinRow" id="spin_ruin_level">
+                    <property name="title" translatable="yes">Ruin Level, % of Capital</property>
+                    <property name="subtitle" translatable="yes">Percentage of capital lost before quitting</property>
+                    <property name="digits">2</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">1.0</property>
+                        <property name="upper">99.0</property>
+                        <property name="step-increment">0.5</property>
+                        <property name="value">30.0</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="orientation">horizontal</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">RANDNUM Simulation Parameters</property>
+                <property name="description" translatable="yes">Parameters of Random Number Simulations</property>
+                <child>
+                  <object class="AdwSpinRow" id="spin_sim_trades">
+                    <property name="title" translatable="yes">Trades Count</property>
+                    <property name="subtitle" translatable="yes">How many trades in one simulation</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">20</property>
+                        <property name="upper">20000</property>
+                        <property name="value">1000</property>
+                        <property name="step-increment">20</property>
+                        <property name="page-increment">100</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSpinRow" id="spin_sim_years">
+                    <property name="title" translatable="yes">Years</property>
+                    <property name="subtitle" translatable="yes">Time window of a simulation in years</property>
+                    <property name="digits">2</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">0.5</property>
+                        <property name="upper">50.0</property>
+                        <property name="step-increment">0.10</property>
+                        <property name="value">5.0</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSpinRow" id="spin_sim_win_rate">
+                    <property name="title" translatable="yes">Win Rate, %</property>
+                    <property name="subtitle" translatable="yes">Percentage of winning trades</property>
+                    <property name="digits">2</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">1.0</property>
+                        <property name="upper">99.0</property>
+                        <property name="step-increment">0.5</property>
+                        <property name="value">36.0</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSpinRow" id="spin_sim_win_loss_ratio">
+                    <property name="title" translatable="yes">Win/Loss Ratio</property>
+                    <property name="subtitle" translatable="yes">Ratio of Average Winner to Average Losing Trade</property>
+                    <property name="digits">4</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">0.01</property>
+                        <property name="upper">300.0</property>
+                        <property name="step-increment">0.01</property>
+                        <property name="value">1.75</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSpinRow" id="spin_sim_fraction">
+                    <property name="title" translatable="yes">Fraction, %</property>
+                    <property name="subtitle" translatable="yes">Percentage of capital risked per trade</property>
+                    <property name="digits">2</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">0.01</property>
+                        <property name="upper">90.0</property>
+                        <property name="step-increment">0.1</property>
+                        <property name="value">0.8</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="yes">Run RANDNUM Simulation</property>
+                <property name="halign">center</property>
+                <property name="width-request">270</property>
+                <property name="height-request">40</property>
+                <property name="tooltip-text">Simulate</property>
+                <signal name="clicked" handler="btn_callback_02"/>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

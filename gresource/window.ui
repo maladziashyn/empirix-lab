@@ -48,12 +48,21 @@
             <property name="content">
               <object class="GtkStack" id="stack">
                 <property name="transition-type">crossfade</property>
-                <child>
+                <!--                <child>
                   <object class="GtkStackPage" id="monte_carlo_stack_page">
                     <property name="name">monte_carlo_stack_page</property>
                     <property name="title" translatable="yes">Monte Carlo Simulation</property>
                     <property name="child">
                       <object class="MonteCarloScrolledWindow" id="monte_carlo_scrolled_window"/>
+                    </property>
+                  </object>
+                </child>-->
+                <child>
+                  <object class="GtkStackPage" id="sanity_check_stack_page">
+                    <property name="name">html_sanity_check_stack_page</property>
+                    <property name="title" translatable="yes">Sanity check backtests</property>
+                    <property name="child">
+                      <object class="SanityCheckScrolledWindow" id="sanity_check_scrolled_window"/>
                     </property>
                   </object>
                 </child>
@@ -66,11 +75,11 @@
   </template>
   <menu id="primary_menu">
     <section>
-<!--      <item>
+      <!--      <item>
         <attribute name="label" translatable="yes">_Save as...</attribute>
         <attribute name="action">win.save-as</attribute>
       </item>-->
-<!--      <item>
+      <!--      <item>
         <attribute name="label" translatable="yes">_Preferences</attribute>
         <attribute name="action">app.preferences</attribute>
       </item>
