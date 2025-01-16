@@ -1,8 +1,7 @@
 # from gi.repository import GObject
 
-# from gresource.monte_carlo import MonteCarloScrolledWindow
 from gresource.sanity_check import SanityCheckScrolledWindow
-# from gresource.another_new_page import AnotherNewClass
+from gresource.monte_carlo import MonteCarloScrolledWindow
 
 
 # # NB: GObject.type_ensure is applicable when gresource is not used

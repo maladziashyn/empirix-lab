@@ -1,6 +1,6 @@
 import gi
 gi.require_version("Gtk", "4.0")
-from gi.repository import Gtk
+from gi.repository import GLib, Gtk
 
 from config import APP_URL
 
@@ -39,10 +39,12 @@ class MonteCarloScrolledWindow(Gtk.ScrolledWindow):
         )
 
     def _on_select_folder_complete(self, dialog, result):
-        # folder = dialog.select_folder_finish(result)
-        if (folder := dialog.select_folder_finish(result)):
+        try:
+            folder = dialog.select_folder_finish(result)
             print(folder.get_path())
             self.entry_target_dir.set_text(folder.get_path())
+        except GLib.Error:
+            pass  # Dismissed by user
 
     @Gtk.Template.Callback("btn_callback_02")
     def click_run_randnum(self, *args):
