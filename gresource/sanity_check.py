@@ -20,9 +20,9 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
 
     @Gtk.Template.Callback("btn_callback_01")
     def pick_source_files(self, *args):
-        fdialog = Gtk.FileDialog.new()
-        fdialog.props.accept_label = "Select"
-        fdialog.open_multiple(
+        file_dialog = Gtk.FileDialog()
+        file_dialog.props.accept_label = "Select"
+        file_dialog.open_multiple(
             parent=self.get_ancestor(Adw.ApplicationWindow),
             cancellable=None,
             callback=self._on_open_multiple_finish
@@ -44,9 +44,9 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
 
     @Gtk.Template.Callback("btn_callback_02")
     def pick_source_dirs(self, *args):
-        native = Gtk.FileDialog.new()
-        native.props.accept_label = "Select"
-        native.select_multiple_folders(
+        file_dialog = Gtk.FileDialog()
+        file_dialog.props.accept_label = "Select"
+        file_dialog.select_multiple_folders(
             parent=self.get_ancestor(Adw.ApplicationWindow),
             cancellable=None,
             callback=self._on_select_multiple_folders_complete
