@@ -6,7 +6,7 @@
     <property name="width-request">900</property>
     <property name="height-request">550</property>
     <property name="default-width">1100</property>
-    <property name="default-height">900</property>
+    <property name="default-height">800</property>
     <property name="resizable">1</property>
     <child>
       <object class="AdwBreakpoint">

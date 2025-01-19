@@ -36,3 +36,6 @@ VAR_DB_FPATH = join(PROJECT_HOME_DIR, "core", VAR_DB_FNAME)
 VAR_TBL_NAME = "state_var"
 DEFAULT_VARS_JSON = join(PROJECT_HOME_DIR, "core", "default_variables.json")
 DEFAULT_WORK_DIR = join(expanduser("~"), "Documents", APP_NAME)
+
+# Gtk.FileDialog, FileFilter, etc.
+ARCH_EXTENSIONS = ["zip", "7z", "rar"]

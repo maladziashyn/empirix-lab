@@ -25,7 +25,6 @@ CREATE TABLE IF NOT EXISTS {c.VAR_TBL_NAME}(
 
 
 def main():
-    print(f"init {c.VAR_DB_FNAME}")
     if not isfile(c.VAR_DB_FPATH):
         with open(c.DEFAULT_VARS_JSON, "r") as f:
             default_vars = json.load(f)
@@ -57,15 +56,8 @@ def main():
             dbm.qry_insert_many(qry_insert, insert_data)
             dbm.vacuum_me()
 
-    # # Create work dir if not exists
-    # with DBManagerSQLite(c.VAR_DB_FPATH) as dbm:
-    #     work_dir = dbm.select_var("file_dialog_initial_folder")
-    #     print(work_dir)
-    # if not isdir(work_dir):
-    #     makedirs(work_dir)
-
+    # Create work dir if not exists
     work_dir = db_man.select_var("file_dialog_initial_folder")
-    print(work_dir)
     if not isdir(work_dir):
         makedirs(work_dir)
 

@@ -8,24 +8,66 @@ project_home_dir = dirname(dirname(realpath(__file__)))
 if project_home_dir not in path:
     path.insert(0, project_home_dir)
 
-from config import APP_URL, DEFAULT_WORK_DIR
+from config import APP_URL, DEFAULT_WORK_DIR, ARCH_EXTENSIONS
+from core import sanity_check
 
 
 @Gtk.Template(resource_path=f"{APP_URL}/sanity_check.ui")
 class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
     __gtype_name__ = "SanityCheckScrolledWindow"
 
-    entry_source_files = Gtk.Template.Child()
     entry_source_dirs = Gtk.Template.Child()
+    entry_source_files = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.files_picked = None
+        self.folders_picked = None
 
     @Gtk.Template.Callback("btn_callback_01")
-    def pick_source_files(self, *args):
-        file_dialog = Gtk.FileDialog()
+    def pick_source_dirs(self, *args):
+        file_dialog = Gtk.FileDialog.new()
         file_dialog.props.accept_label = "Select"
+        file_dialog.props.title = "Select folders"
+        file_dialog.props.initial_folder = Gio.File.new_for_path(DEFAULT_WORK_DIR)
+        file_dialog.select_multiple_folders(
+            parent=self.get_ancestor(Adw.ApplicationWindow),
+            cancellable=None,
+            callback=self._on_select_multiple_folders_complete
+        )
+
+    def _on_select_multiple_folders_complete(self, dialog, result):
+        try:
+            folders_list_model = dialog.select_multiple_folders_finish(result)
+            n_folders = folders_list_model.get_n_items()
+            self.folders_picked = list()
+            for i in range(n_folders):
+                model_folder = folders_list_model.get_item(i)
+                folder_path = model_folder.get_path()
+                self.folders_picked.append(folder_path)
+            self.entry_source_dirs.set_text(", ".join(self.folders_picked))
+            self.entry_source_files.set_text("")
+            self.files_picked = None
+
+        except GLib.Error:
+            pass  # Dismissed by user
+
+    @Gtk.Template.Callback("btn_callback_02")
+    def pick_source_files(self, *args):
+        file_dialog = Gtk.FileDialog.new()
+        file_dialog.props.accept_label = "Select"
+        file_dialog.props.title = "Select files: zip or 7z"
+
+        # Add filters for archive files
+        archive_filter = Gtk.FileFilter()
+        archive_filter.set_name(f"Archive Files ({", ".join(ARCH_EXTENSIONS)})")
+        for ext in ARCH_EXTENSIONS:
+            archive_filter.add_pattern(f"*.{ext}")
+        # Create a Gio.ListStore and add the filter
+        filters = Gio.ListStore.new(Gtk.FileFilter)
+        filters.append(archive_filter)
+        file_dialog.set_filters(filters)
+
         file_dialog.props.initial_folder = Gio.File.new_for_path(DEFAULT_WORK_DIR)
         file_dialog.open_multiple(
             parent=self.get_ancestor(Adw.ApplicationWindow),
@@ -41,27 +83,14 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
             for i in range(n_files):
                 model_file = files_list_model.get_item(i)
                 file_path = model_file.get_path()
-                print(basename(file_path))
                 self.files_picked.append(file_path)
             self.entry_source_files.set_text(", ".join(self.files_picked))
+            self.entry_source_dirs.set_text("")
+            self.folders_picked = None
         except GLib.Error:
             pass  # Dismissed by user
 
-    @Gtk.Template.Callback("btn_callback_02")
-    def pick_source_dirs(self, *args):
-        file_dialog = Gtk.FileDialog()
-        file_dialog.props.accept_label = "Select"
-        file_dialog.props.initial_folder = Gio.File.new_for_path(DEFAULT_WORK_DIR)
-        file_dialog.select_multiple_folders(
-            parent=self.get_ancestor(Adw.ApplicationWindow),
-            cancellable=None,
-            callback=self._on_select_multiple_folders_complete
-        )
-
-    def _on_select_multiple_folders_complete(self, dialog, result):
-        try:
-            print("in try")
-            folders = dialog.select_multiple_folders_finish(result)
-            print(f"items = {folders.get_n_items()}")
-        except GLib.Error:
-            pass  # Dismissed by user
+    @Gtk.Template.Callback("btn_callback_03")
+    def run_sanity_check(self, *args):
+        print("run")
+        # sanity_check.main()
