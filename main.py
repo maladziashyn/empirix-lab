@@ -1,12 +1,15 @@
 import gi
 gi.require_version("Adw", "1")
+import sqlite3
+
 from gi.repository import Adw, Gio
+from os.path import isfile
 
 import config as c
 
+from core import initialize_var_db
 from gresource import compile_register
 from gresource import load_widgets
-
 from gresource.window import AppWindow
 
 
@@ -65,7 +68,8 @@ def main():
     """The application's entry point."""
 
     # Initialize var db
-    # TODO
+    if not isfile(c.VAR_DB_FPATH):
+        initialize_var_db.main()
 
     # Show main window
     app = MyApp()

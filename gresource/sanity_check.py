@@ -1,7 +1,7 @@
 import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-from gi.repository import Adw, GLib, Gtk
+from gi.repository import Adw, Gio, GLib, Gtk
 from os.path import basename
 
 from config import APP_URL
@@ -22,6 +22,7 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
     def pick_source_files(self, *args):
         file_dialog = Gtk.FileDialog()
         file_dialog.props.accept_label = "Select"
+        file_dialog.props.initial_folder = Gio.File.new_for_path("/home/rsm/Documents/MyProjects/empirix-lab/core")
         file_dialog.open_multiple(
             parent=self.get_ancestor(Adw.ApplicationWindow),
             cancellable=None,
@@ -46,6 +47,7 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
     def pick_source_dirs(self, *args):
         file_dialog = Gtk.FileDialog()
         file_dialog.props.accept_label = "Select"
+        file_dialog.props.initial_folder = Gio.File.new_for_path("/home/rsm/Documents/MyProjects/empirix-lab/core")
         file_dialog.select_multiple_folders(
             parent=self.get_ancestor(Adw.ApplicationWindow),
             cancellable=None,

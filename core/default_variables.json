@@ -7,7 +7,11 @@
   "default_values": {
     "work_dir": {
       "data_type": "2",
-      "value": "~/Documents/EmpirixLab"
+      "value": null
+    },
+    "file_dialog_initial_folder": {
+      "data_type": "2",
+      "value": null
     },
     "curves_count": {
       "data_type": "0",

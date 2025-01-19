@@ -1,5 +1,13 @@
 import sqlite3
 
+from os.path import dirname,realpath
+from sys import path
+project_home_dir = dirname(dirname(realpath(__file__)))
+if project_home_dir not in path:
+    path.insert(0, project_home_dir)
+
+import config as c
+
 
 class DBManager:
     """Parent class for db connection context manager."""
@@ -36,3 +44,18 @@ class DBManagerSQLite(DBManager):
 
     def vacuum_me(self):
         self.con.execute("VACUUM;")
+
+    def select_var(self, var_name):
+        qry = f"SELECT {self._get_dtype(var_name)} FROM {c.VAR_TBL_NAME} WHERE var_name = '{var_name}';"
+        return self.cur.execute(qry).fetchone()[0]
+
+    def _get_dtype(self, var_name):
+        qry = f"SELECT data_type FROM {c.VAR_TBL_NAME} WHERE var_name = '{var_name}';"
+        return self.cur.execute(qry).fetchone()[0]
+
+    def update_var(self, var_name, new_val):
+        dtype = self._get_dtype(var_name)
+        new_val = f"'{new_val}'" if dtype == "text_val" else new_val
+        qry = f"UPDATE {c.VAR_TBL_NAME} SET {self._get_dtype(var_name)} = {new_val} WHERE var_name = '{var_name}';"
+        self.cur.execute(qry)
+        self.con.commit()

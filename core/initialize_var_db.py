@@ -1,6 +1,6 @@
 import json
 
-from os.path import dirname, isfile, realpath
+from os.path import dirname, expanduser, isfile, join, realpath
 from sys import path
 project_home_dir = dirname(dirname(realpath(__file__)))
 if project_home_dir not in path:
@@ -8,7 +8,8 @@ if project_home_dir not in path:
 
 import config as c
 
-from db_manager import DBManagerSQLite
+from core.db_manager import DBManagerSQLite
+
 
 QRY_DROP = f"DROP TABLE IF EXISTS {c.VAR_TBL_NAME};"
 QRY_CREATE = f"""
@@ -32,7 +33,11 @@ def main():
     data_types = default_vars["data_types"]
     default_values = default_vars["default_values"]
 
-    qry_insert = f"INSERT INTO empirix_var(var_name, data_type, {", ".join(data_types.values())}) VALUES (?, ?, ?, ?, ?);"
+    # Update Empirix default work dir in dict, leave json intact
+    default_values["work_dir"]["value"] = join(expanduser("~"), "Documents", "EmpirixLab")
+    default_values["file_dialog_initial_folder"]["value"] = default_values["work_dir"]["value"]
+
+    qry_insert = f"INSERT INTO {c.VAR_TBL_NAME}(var_name, data_type, {", ".join(data_types.values())}) VALUES (?, ?, ?, ?, ?);"
 
     insert_data = list()
     val_count = len(data_types)
