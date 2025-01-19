@@ -59,3 +59,8 @@ class DBManagerSQLite(DBManager):
         qry = f"UPDATE {c.VAR_TBL_NAME} SET {self._get_dtype(var_name)} = {new_val} WHERE var_name = '{var_name}';"
         self.cur.execute(qry)
         self.con.commit()
+
+
+def select_var(var_name):
+    with DBManagerSQLite(c.VAR_DB_FPATH) as dbm:
+        return dbm.select_var(var_name)

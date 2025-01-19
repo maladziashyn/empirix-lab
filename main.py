@@ -68,8 +68,7 @@ def main():
     """The application's entry point."""
 
     # Initialize var db
-    if not isfile(c.VAR_DB_FPATH):
-        initialize_var_db.main()
+    initialize_var_db.main()
 
     # Show main window
     app = MyApp()

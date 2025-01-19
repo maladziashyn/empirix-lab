@@ -2,9 +2,13 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Adw, Gio, GLib, Gtk
-from os.path import basename
+from os.path import basename, dirname,realpath
+from sys import path
+project_home_dir = dirname(dirname(realpath(__file__)))
+if project_home_dir not in path:
+    path.insert(0, project_home_dir)
 
-from config import APP_URL
+from config import APP_URL, DEFAULT_WORK_DIR
 
 
 @Gtk.Template(resource_path=f"{APP_URL}/sanity_check.ui")
@@ -22,7 +26,7 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
     def pick_source_files(self, *args):
         file_dialog = Gtk.FileDialog()
         file_dialog.props.accept_label = "Select"
-        file_dialog.props.initial_folder = Gio.File.new_for_path("/home/rsm/Documents/MyProjects/empirix-lab/core")
+        file_dialog.props.initial_folder = Gio.File.new_for_path(DEFAULT_WORK_DIR)
         file_dialog.open_multiple(
             parent=self.get_ancestor(Adw.ApplicationWindow),
             cancellable=None,
@@ -47,7 +51,7 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
     def pick_source_dirs(self, *args):
         file_dialog = Gtk.FileDialog()
         file_dialog.props.accept_label = "Select"
-        file_dialog.props.initial_folder = Gio.File.new_for_path("/home/rsm/Documents/MyProjects/empirix-lab/core")
+        file_dialog.props.initial_folder = Gio.File.new_for_path(DEFAULT_WORK_DIR)
         file_dialog.select_multiple_folders(
             parent=self.get_ancestor(Adw.ApplicationWindow),
             cancellable=None,
