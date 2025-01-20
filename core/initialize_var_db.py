@@ -1,6 +1,6 @@
 import json
 
-from os import makedirs
+from os import makedirs, remove
 from os.path import dirname, expanduser, isdir, isfile, join, realpath
 from sys import path
 project_home_dir = dirname(dirname(realpath(__file__)))
@@ -25,6 +25,10 @@ CREATE TABLE IF NOT EXISTS {c.VAR_TBL_NAME}(
 
 
 def main():
+    # Remove before packaging
+    if isfile(c.VAR_DB_FPATH):
+        remove(c.VAR_DB_FPATH)
+
     if not isfile(c.VAR_DB_FPATH):
         with open(c.DEFAULT_VARS_JSON, "r") as f:
             default_vars = json.load(f)

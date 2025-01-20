@@ -21,10 +21,17 @@ def main():
 
     # Check gresource recompile flag
     with open(join(c.PROJECT_HOME_DIR, "config.py"), "r") as f:
-        config_content = f.read()
-    if "GRESOURCE_RECOMPILE = True" in config_content:
+        contents = f.read()
+    if "GRESOURCE_RECOMPILE = True" in contents:
         print("[BLOCKER] config.py: set GRESOURCE_RECOMPILE to False.")
         return
+
+    with open(join(c.PROJECT_HOME_DIR, "core", "initialize_var_db.py"), "r") as f:
+        contents = f.read()
+    if "remove(c.VAR_DB_FPATH)" in contents:
+        print("[BLOCKER] initialize_var_db.py: comment out the line with db removal.")
+        return
+
 
     # Start with checking/making home dir for packaging process
     bundles_home = join(expanduser("~"), "Documents", "Bundles")

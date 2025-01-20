@@ -10,6 +10,7 @@ if project_home_dir not in path:
 
 from config import APP_URL, DEFAULT_WORK_DIR, ARCH_EXTENSIONS
 from core import sanity_check
+from core.db_manager import select_var
 
 
 @Gtk.Template(resource_path=f"{APP_URL}/sanity_check.ui")
@@ -18,6 +19,8 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
 
     entry_source_dirs = Gtk.Template.Child()
     entry_source_files = Gtk.Template.Child()
+
+    initial_folder = Gio.File.new_for_path(select_var("file_dialog_initial_folder"))
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -29,7 +32,7 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
         file_dialog = Gtk.FileDialog.new()
         file_dialog.props.accept_label = "Select"
         file_dialog.props.title = "Select folders"
-        file_dialog.props.initial_folder = Gio.File.new_for_path(DEFAULT_WORK_DIR)
+        file_dialog.props.initial_folder = self.initial_folder
         file_dialog.select_multiple_folders(
             parent=self.get_ancestor(Adw.ApplicationWindow),
             cancellable=None,
@@ -68,7 +71,7 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
         filters.append(archive_filter)
         file_dialog.set_filters(filters)
 
-        file_dialog.props.initial_folder = Gio.File.new_for_path(DEFAULT_WORK_DIR)
+        file_dialog.props.initial_folder = self.initial_folder
         file_dialog.open_multiple(
             parent=self.get_ancestor(Adw.ApplicationWindow),
             cancellable=None,
