@@ -1,0 +1,270 @@
+{
+    "tail": {
+        "sqlite": "",
+        "mariadb": "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci"
+    },
+    "Parameters": {
+        "hash": {
+            "type": {
+                "sqlite": "TEXT",
+                "mariadb": "VARCHAR(50) NOT NULL"
+            },
+            "insert": true,
+            "in_index": true,
+            "primary": true
+        },
+        "param_str": {
+            "type": {
+                "sqlite": "TEXT",
+                "mariadb": "VARCHAR(1000) DEFAULT NULL"
+            },
+            "insert": true,
+            "in_index": false
+        }
+    },
+    "Reports": {
+        "id": {
+            "type": {
+                "sqlite": "INTEGER NOT NULL UNIQUE",
+                "mariadb": "INT UNSIGNED NOT NULL AUTO_INCREMENT"
+            },
+            "insert": false,
+            "in_index": true,
+            "primary": true
+        },
+        "hash": {
+            "type": {
+                "sqlite": "TEXT",
+                "mariadb": "VARCHAR(50) NOT NULL"
+            },
+            "insert": true,
+            "in_index": true,
+            "foreign_key": {
+                "to_table": "Parameters",
+                "to_key": "hash"
+            }
+        },
+        "fpath": {
+            "type": {
+                "sqlite": "TEXT",
+                "mariadb": "VARCHAR(500) NOT NULL"
+            },
+            "insert": true,
+            "in_index": false
+        },
+        "date_from": {
+            "type": {
+                "sqlite": "TEXT",
+                "mariadb": "DATETIME NOT NULL"
+            },
+            "insert": true,
+            "in_index": true
+        },
+        "date_to": {
+            "type": {
+                "sqlite": "TEXT",
+                "mariadb": "DATETIME NOT NULL"
+            },
+            "insert": true,
+            "in_index": true
+        },
+        "up_who": {
+            "type": {
+                "sqlite": "TEXT",
+                "mariadb": "VARCHAR(50) DEFAULT NULL"
+            },
+            "insert": false,
+            "in_index": false
+        },
+        "up_when": {
+            "type": {
+                "sqlite": "TEXT",
+                "mariadb": "DATETIME DEFAULT NULL"
+            },
+            "insert": false,
+            "in_index": false
+        }
+    },
+    "Trades": {
+        "id": {
+            "type": {
+                "sqlite": "INTEGER NOT NULL UNIQUE",
+                "mariadb": "INT UNSIGNED NOT NULL AUTO_INCREMENT"
+            },
+            "insert": false,
+            "in_index": true,
+            "primary": true
+        },
+        "hash": {
+            "type": {
+                "sqlite": "TEXT",
+                "mariadb": "VARCHAR(50) NOT NULL"
+            },
+            "insert": true,
+            "in_index": true
+        },
+        "label": {
+            "type": {
+                "sqlite": "TEXT",
+                "mariadb": "VARCHAR(100) DEFAULT NULL"
+            },
+            "insert": true,
+            "in_index": false
+        },
+        "mln": {
+            "type": {
+                "sqlite": "REAL",
+                "mariadb": "DOUBLE UNSIGNED DEFAULT NULL"
+            },
+            "insert": true,
+            "in_index": false
+        },
+        "is_long": {
+            "type": {
+                "sqlite": "INTEGER",
+                "mariadb": "BOOLEAN DEFAULT NULL"
+            },
+            "insert": true,
+            "in_index": true
+        },
+        "open_price": {
+            "type": {
+                "sqlite": "REAL",
+                "mariadb": "DOUBLE DEFAULT NULL"
+            },
+            "insert": true,
+            "in_index": false
+        },
+        "close_price": {
+            "type": {
+                "sqlite": "REAL",
+                "mariadb": "DOUBLE DEFAULT NULL"
+            },
+            "insert": true,
+            "in_index": false
+        },
+        "pnl_curr": {
+            "type": {
+                "sqlite": "REAL",
+                "mariadb": "DOUBLE DEFAULT NULL"
+            },
+            "insert": true,
+            "in_index": false
+        },
+        "pnl_pips": {
+            "type": {
+                "sqlite": "REAL",
+                "mariadb": "DOUBLE DEFAULT NULL"
+            },
+            "insert": true,
+            "in_index": true
+        },
+        "open_date": {
+            "type": {
+                "sqlite": "TEXT",
+                "mariadb": "DATETIME DEFAULT NULL"
+            },
+            "insert": true,
+            "in_index": true
+        },
+        "close_date": {
+            "type": {
+                "sqlite": "TEXT",
+                "mariadb": "DATETIME DEFAULT NULL"
+            },
+            "insert": true,
+            "in_index": true
+        },
+        "tag": {
+            "type": {
+                "sqlite": "TEXT",
+                "mariadb": "VARCHAR(100) DEFAULT NULL"
+            },
+            "insert": true,
+            "in_index": true
+        },
+        "close_event": {
+            "type": {
+                "sqlite": "TEXT",
+                "mariadb": "VARCHAR(100) DEFAULT NULL"
+            },
+            "insert": true,
+            "in_index": true
+        },
+        "pnl": {
+            "type": {
+                "sqlite": "REAL",
+                "mariadb": "DOUBLE DEFAULT NULL"
+            },
+            "insert": true,
+            "in_index": true
+        }
+    },
+    "mapping_instrument": {
+        "First tick time": "first_tick_time",
+        "First tick bid value": "first_bid",
+        "First tick ask value": "first_ask",
+        "Last tick time": "last_tick_time",
+        "Last tick bid value": "last_bid",
+        "Last tick ask value": "last_ask",
+        "Positions total": "positions_total",
+        "Closed positions": "closed_positions",
+        "Orders total": "orders_total",
+        "Bought": "amount_bought",
+        "Sold": "amount_sold",
+        "Turnover": "turnover_instrument",
+        "Commission": "fees_instrument"
+    },
+    "mapping_tickers": {
+        "audcad": "AUD/CAD",
+        "audchf": "AUD/CHF",
+        "audjpy": "AUD/JPY",
+        "audnzd": "AUD/NZD",
+        "audusd": "AUD/USD",
+        "cadchf": "CAD/CHF",
+        "cadjpy": "CAD/JPY",
+        "chfjpy": "CHF/JPY",
+        "euraud": "EUR/AUD",
+        "eurcad": "EUR/CAD",
+        "eurchf": "EUR/CHF",
+        "eurgbp": "EUR/GBP",
+        "eurjpy": "EUR/JPY",
+        "eurnok": "EUR/NOK",
+        "eurnzd": "EUR/NZD",
+        "eurpln": "EUR/PLN",
+        "eurusd": "EUR/USD",
+        "gbpaud": "GBP/AUD",
+        "gbpcad": "GBP/CAD",
+        "gbpchf": "GBP/CHF",
+        "gbpjpy": "GBP/JPY",
+        "gbpnzd": "GBP/NZD",
+        "gbpusd": "GBP/USD",
+        "nzdcad": "NZD/CAD",
+        "nzdchf": "NZD/CHF",
+        "nzdjpy": "NZD/JPY",
+        "nzdusd": "NZD/USD",
+        "usdcad": "USD/CAD",
+        "usdchf": "USD/CHF",
+        "usdjpy": "USD/JPY",
+        "usdnok": "USD/NOK",
+        "usdpln": "USD/PLN",
+        "usdtry": "USD/TRY",
+        "usdzar": "USD/ZAR",
+        "xagusd": "XAG/USD",
+        "xauusd": "XAU/USD",
+        "btcusd": "BTC/USD",
+        "ethusd": "ETH/USD",
+        "cocoacmdusd": "COCOA.CMD/USD",
+        "sugarcmdusd": "SUGAR.CMD/USD",
+        "deuidxeur": "DEU.IDX/EUR",
+        "dollaridxusd": "DOLLAR.IDX/USD",
+        "gbridxgbp": "GBR.IDX/GBP",
+        "jpnidxjpy": "JPN.IDX/JPY",
+        "usa30usd": "USA30.IDX/USD",
+        "usa30idxusd": "USA30.IDX/USD",
+        "usa500usd": "USA500.IDX/USD",
+        "usa500idxusd": "USA500.IDX/USD",
+        "usatechusd": "USATECH.IDX/USD",
+        "usatechidxusd": "USATECH.IDX/USD"
+    }
+}

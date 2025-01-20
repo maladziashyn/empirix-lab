@@ -1,7 +1,7 @@
 import json
 
 from os import makedirs, remove
-from os.path import dirname, expanduser, isdir, isfile, join, realpath
+from os.path import dirname, isdir, isfile, realpath
 from sys import path
 project_home_dir = dirname(dirname(realpath(__file__)))
 if project_home_dir not in path:

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="Adw" version="1.0"/>
+  <template class="AlertDialogTest" parent="AdwAlertDialog">
+    <property name="heading" translatable="yes">Missing source</property>
+    <property name="body" translatable="yes">Please select source directories or archive files to continue.</property>
+<!--     <property name="default-response">save</property> -->
+<!--     <property name="close-response">cancel</property> -->
+    <property name="close-response">ok</property>
+<!--     <signal name="response" handler="response_cb"/> -->
+<!--     <signal name="response::proceed" handler="_on_proceed"/> -->
+    <responses>
+<!--       <response id="cancel" translatable="yes">_Cancel</response> -->
+<!--       <response id="ok" translatable="yes" appearance="destructive">_OK</response> -->
+      <response id="ok" translatable="yes">_OK</response>
+<!--       <response id="discard" translatable="yes" appearance="destructive">_Discard</response> -->
+<!--       <response id="save" translatable="yes" appearance="suggested" enabled="false">_Save</response> -->
+    </responses>
+  </template>
+</interface>

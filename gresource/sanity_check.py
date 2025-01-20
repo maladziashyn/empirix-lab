@@ -2,13 +2,13 @@ import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Adw, Gio, GLib, Gtk
-from os.path import basename, dirname,realpath
+from os.path import dirname,realpath
 from sys import path
 project_home_dir = dirname(dirname(realpath(__file__)))
 if project_home_dir not in path:
     path.insert(0, project_home_dir)
 
-from config import APP_URL, DEFAULT_WORK_DIR, ARCH_EXTENSIONS
+from config import APP_URL, ARCH_EXTENSIONS
 from core import sanity_check
 from core.db_manager import select_var
 
@@ -17,6 +17,7 @@ from core.db_manager import select_var
 class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
     __gtype_name__ = "SanityCheckScrolledWindow"
 
+    entry_declared_strategy = Gtk.Template.Child()
     entry_source_dirs = Gtk.Template.Child()
     entry_source_files = Gtk.Template.Child()
 
@@ -95,5 +96,9 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
 
     @Gtk.Template.Callback("btn_callback_03")
     def run_sanity_check(self, *args):
-        print("run")
-        # sanity_check.main()
+        sanity_check.main(
+            alert_dialog_parent=self.get_ancestor(Adw.ApplicationWindow),
+            declared_strategy=self.entry_declared_strategy.get_text(),
+            folders_picked=self.folders_picked,
+            files_picked=self.files_picked
+        )

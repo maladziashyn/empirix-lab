@@ -12,7 +12,7 @@ APP_DEV_NAME = "Raman Maładziašyn"
 APP_DEVS = ["Raman Maładziašyn"]
 
 # Distribution
-VERSION = "25.1.16"
+VERSION = "25.1.2"
 PACKAGE_NAME = "empirix-lab"
 CONTROL_FILE_DESC = f"{APP_NAME}\n Tools for algorithmic trading by Empirix."
 DESKTOP_ITEM_COMMENT = "Tools for algorithmic trading by Empirix"
@@ -39,3 +39,6 @@ DEFAULT_WORK_DIR = join(expanduser("~"), "Documents", APP_NAME)
 
 # Gtk.FileDialog, FileFilter, etc.
 ARCH_EXTENSIONS = ["zip", "7z", "rar"]
+
+# Specs
+SPECS_TBL_DB = join(PROJECT_HOME_DIR, "core", "db_tables_specs.json")
