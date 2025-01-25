@@ -1,7 +1,7 @@
 import json
 
 from os import makedirs, remove
-from os.path import dirname, isdir, isfile, realpath
+from os.path import dirname, join, isdir, isfile, realpath
 from sys import path
 project_home_dir = dirname(dirname(realpath(__file__)))
 if project_home_dir not in path:
@@ -38,6 +38,7 @@ def main():
         # Update Empirix default variables for insertion
         default_values["work_dir"]["value"] = c.DEFAULT_WORK_DIR
         default_values["file_dialog_initial_folder"]["value"] = c.DEFAULT_WORK_DIR
+        default_values["sanity_checks_dir"]["value"] = join(c.DEFAULT_WORK_DIR, c.DEFAULT_SANITY_CHECKS_DIR)
 
         qry_insert = f"INSERT INTO {c.VAR_TBL_NAME}(var_name, data_type, {", ".join(data_types.values())}) VALUES (?, ?, ?, ?, ?);"
 

@@ -8,6 +8,8 @@ from os.path import isfile
 import config as c
 
 from core import initialize_var_db
+initialize_var_db.main()  # init DB before load_widgets as they need the DB to use.
+
 from gresource import compile_register
 from gresource import load_widgets
 from gresource.window import AppWindow
@@ -68,7 +70,7 @@ def main():
     """The application's entry point."""
 
     # Initialize var db
-    initialize_var_db.main()
+    # initialize_var_db.main()
 
     # Show main window
     app = MyApp()

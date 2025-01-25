@@ -1,3 +1,5 @@
+import re
+
 from os.path import dirname, expanduser, join, realpath
 
 
@@ -36,9 +38,47 @@ VAR_DB_FPATH = join(PROJECT_HOME_DIR, "core", VAR_DB_FNAME)
 VAR_TBL_NAME = "state_var"
 DEFAULT_VARS_JSON = join(PROJECT_HOME_DIR, "core", "default_variables.json")
 DEFAULT_WORK_DIR = join(expanduser("~"), "Documents", APP_NAME)
+DEFAULT_SANITY_CHECKS_DIR = "sanity_checks"
 
 # Gtk.FileDialog, FileFilter, etc.
 ARCH_EXTENSIONS = ["zip", "7z", "rar"]
 
 # Specs
 SPECS_TBL_DB = join(PROJECT_HOME_DIR, "core", "db_tables_specs.json")
+
+# Xpath
+XP_0 = "/html/body/div[3]/"  # beginning of all Xpaths
+xp_h1 = XP_0 + "h1"  # "/html/body/div[3]/h1"
+xp_params = XP_0 + "table[2]"
+
+# RegEx patterns
+re_strategy = re.compile(r"^\w+\b")
+re_vjf_endings = re.compile(r"_(mux|mxu|cux|cxu)")
+
+re_date = re.compile(r"\b\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\b")
+re_instrument = re.compile(r"\b\w{3}/\w{3}")
+
+instr_meta_keys_mapped = {
+    "First tick time": "d_first_tick",
+    "First BID": "d_first_bid",
+    "First tick bid value": "d_first_bid",
+    "First ASK": "d_first_ask",
+    "First tick ask value": "d_first_ask",
+    "Last tick time": "d_last_tick",
+    "Last BID": "d_last_bid",
+    "Last tick bid value": "d_last_bid",
+    "Last ASK": "d_last_ask",
+    "Last tick ask value": "d_last_ask",
+    "Positions total": "d_pos_total",
+    "Closed positions": "d_closed_pos",
+    "Orders total": "d_orders",
+    "Amount bought": "d_bought",
+    "Bought": "d_bought",
+    "Amount sold": "d_sold",
+    "Sold": "d_sold",
+    "Turnover": "d_turnover",
+    "Commission Fees": "d_commission",
+    "Commission": "d_commission",
+}
+
+date_columns = ["h1_date_from", "h1_date_to", "d_first_tick", "d_last_tick"]

@@ -20,6 +20,7 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
     entry_declared_strategy = Gtk.Template.Child()
     entry_source_dirs = Gtk.Template.Child()
     entry_source_files = Gtk.Template.Child()
+    spin_max_size_megabytes = Gtk.Template.Child()
 
     initial_folder = Gio.File.new_for_path(select_var("file_dialog_initial_folder"))
 
@@ -96,9 +97,10 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
 
     @Gtk.Template.Callback("btn_callback_03")
     def run_sanity_check(self, *args):
-        sanity_check.main(
+        sanity_check.run_check(
             alert_dialog_parent=self.get_ancestor(Adw.ApplicationWindow),
             declared_strategy=self.entry_declared_strategy.get_text(),
             folders_picked=self.folders_picked,
-            files_picked=self.files_picked
+            files_picked=self.files_picked,
+            max_size=int(self.spin_max_size_megabytes.get_text())
         )

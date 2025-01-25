@@ -25,13 +25,11 @@
                     <property name="show_apply_button">true</property>
                   </object>
                 </child>
-
-
                 <child>
                   <object class="AdwEntryRow" id="entry_source_dirs">
                     <property name="title" translatable="yes">Source directories</property>
                     <property name="tooltip_text" translatable="yes">Select one or more directories.</property>
-                    <property name="show_apply_button">true</property>
+                    <property name="editable">0</property>
                     <child type="suffix">
                       <object class="GtkButton">
                         <property name="icon_name">folder</property>
@@ -45,7 +43,7 @@
                   <object class="AdwEntryRow" id="entry_source_files">
                     <property name="title" translatable="yes">Source files</property>
                     <property name="tooltip_text" translatable="yes">Select one or more archives: zip or 7z.</property>
-                    <property name="show_apply_button">true</property>
+                    <property name="editable">0</property>
                     <child type="suffix">
                       <object class="GtkButton">
                         <property name="icon_name">folder</property>
@@ -56,9 +54,26 @@
                   </object>
                 </child>
                 <child>
+                  <object class="AdwSpinRow" id="spin_max_size_megabytes">
+                    <property name="title" translatable="yes">Maximum size, MB</property>
+                    <property name="subtitle" translatable="yes">Maximum allowed size of a file in megabytes</property>
+                    <property name="tooltip_text" translatable="yes">Depending on RAM your computer may fail to process larger files.</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">1</property>
+                        <property name="upper">10000</property>
+                        <property name="value">75</property>
+                        <property name="step-increment">1</property>
+                        <property name="page-increment">10</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
                   <object class="AdwSwitchRow" id="switch_show_on_end">
                     <property name="title" translatable="yes">Show report</property>
                     <property name="subtitle" translatable="yes">Open report in Excel after completion</property>
+                    <property name="tooltip_text" translatable="yes">Turn on to automatically show Excel file after the process is complete. Otherwise you'll find the output .xlsx in Empirix Lab directory.</property>
                     <property name="active">true</property>
                   </object>
                 </child>
@@ -68,7 +83,7 @@
               <object class="GtkButton">
                 <property name="label" translatable="yes">Run check</property>
                 <property name="halign">center</property>
-<!--                <property name="width-request">270</property>
+                <!--                <property name="width-request">270</property>
                 <property name="height-request">40</property>-->
                 <property name="tooltip-text">Sanity check selected sources</property>
                 <signal name="clicked" handler="btn_callback_03"/>

@@ -17,7 +17,7 @@ def main():
     print("Checking code...\n")
 
     file_list = []
-    exclude = set(["venv", "icons", "logo", ".git", "__pycache__"])
+    exclude = set(["venv", "icons", "logo", ".git", "__pycache__", "_misc"])
     for root, dirs, files in walk(project_home):
         dirs[:] = [d for d in dirs if d not in exclude]
         for file in files:
