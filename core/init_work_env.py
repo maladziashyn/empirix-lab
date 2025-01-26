@@ -12,20 +12,25 @@ import config as c
 from core import db_manager as db_man
 
 
-QRY_DROP = f"DROP TABLE IF EXISTS {c.VAR_TBL_NAME};"
-QRY_CREATE = f"""
-CREATE TABLE IF NOT EXISTS {c.VAR_TBL_NAME}(
-    var_name TEXT PRIMARY KEY,
-    data_type TEXT,
-    int_val INTEGER,
-    real_val REAL,
-    text_val TEXT
-);
-"""
-
-
 def main():
-    # Remove before packaging
+    """
+    Create DB file and make work directories.
+    """
+
+    initialize_db()
+    initialize_home_dir()
+
+
+def initialize_home_dir():
+    # Create work dir and sanity_checks if not exist
+    for dir_name in ["work_dir", "sanity_checks_dir"]:
+        dir_path = db_man.select_var(dir_name)
+        if not isdir(dir_path):
+            makedirs(dir_path)
+
+
+def initialize_db():
+    # Remove this before packaging
     if isfile(c.VAR_DB_FPATH):
         remove(c.VAR_DB_FPATH)
 
@@ -55,16 +60,21 @@ def main():
             )
 
         # Create variables table, insert default data
+        qry_drop = f"DROP TABLE IF EXISTS {c.VAR_TBL_NAME};"
+        qry_create = f"""
+        CREATE TABLE IF NOT EXISTS {c.VAR_TBL_NAME}(
+            var_name TEXT PRIMARY KEY,
+            data_type TEXT,
+            int_val INTEGER,
+            real_val REAL,
+            text_val TEXT
+        );
+        """
         with db_man.DBManagerSQLite(c.VAR_DB_FPATH) as dbm:
-            dbm.qry_exec_only(QRY_DROP)
-            dbm.qry_exec_only(QRY_CREATE)
+            dbm.qry_exec_only(qry_drop)
+            dbm.qry_exec_only(qry_create)
             dbm.qry_insert_many(qry_insert, insert_data)
             dbm.vacuum_me()
-
-    # Create work dir if not exists
-    work_dir = db_man.select_var("file_dialog_initial_folder")
-    if not isdir(work_dir):
-        makedirs(work_dir)
 
 
 def val_among_nulls_as_list(val_count, val_idx, val_in):

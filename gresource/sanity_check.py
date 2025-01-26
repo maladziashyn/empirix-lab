@@ -21,6 +21,7 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
     entry_source_dirs = Gtk.Template.Child()
     entry_source_files = Gtk.Template.Child()
     spin_max_size_megabytes = Gtk.Template.Child()
+    switch_show_on_end = Gtk.Template.Child()
 
     initial_folder = Gio.File.new_for_path(select_var("file_dialog_initial_folder"))
 
@@ -102,5 +103,6 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
             declared_strategy=self.entry_declared_strategy.get_text(),
             folders_picked=self.folders_picked,
             files_picked=self.files_picked,
-            max_size=int(self.spin_max_size_megabytes.get_text())
+            max_size=int(self.spin_max_size_megabytes.get_text()),
+            open_excel=self.switch_show_on_end.get_active()
         )

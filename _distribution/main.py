@@ -26,10 +26,10 @@ def main():
         print("[BLOCKER] config.py: set GRESOURCE_RECOMPILE to False.")
         return
 
-    with open(join(c.PROJECT_HOME_DIR, "core", "initialize_var_db.py"), "r") as f:
+    with open(join(c.PROJECT_HOME_DIR, "core", "init_work_env.py"), "r") as f:
         contents = f.read()
     if "remove(c.VAR_DB_FPATH)" in contents:
-        print("[BLOCKER] initialize_var_db.py: comment out the line with db removal.")
+        print("[BLOCKER] init_work_env.py: comment out the line with db removal.")
         return
 
 

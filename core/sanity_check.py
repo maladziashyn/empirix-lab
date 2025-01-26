@@ -11,8 +11,8 @@ from concurrent.futures import ProcessPoolExecutor
 from datetime import datetime
 from itertools import repeat
 from lxml import html
-from os import makedirs
-from os.path import basename, getsize, isdir, join
+from os.path import basename, getsize, join
+from sys import platform
 
 import config as c
 
@@ -21,10 +21,10 @@ from core import db_manager as db_man
 
 
 def main():
-    run_check(None, "adr_ctr_v1", ["/home/rsm/Documents/empirix_ui_home/raw_html/adr_ctr_v1"], None)
+    run_check(None, "adr_ctr_v1", ["/home/rsm/Documents/empirix_ui_home/raw_html/adr_ctr_v1"], None, 75, True)
 
 
-def run_check(alert_dialog_parent, declared_strategy, folders_picked, files_picked, max_size):
+def run_check(alert_dialog_parent, declared_strategy, folders_picked, files_picked, max_size, open_excel):
     """Check source dirs/files before parsing raw htmls."""
 
     if not folders_picked and not files_picked:
@@ -33,12 +33,12 @@ def run_check(alert_dialog_parent, declared_strategy, folders_picked, files_pick
     elif folders_picked:
         # check_dir, check_files = check_src_dir(folders_picked[0])
         check_dir, check_files = check_src_dir(declared_strategy, folders_picked, max_size)
-        make_excel(declared_strategy, check_dir, check_files)
+        make_excel(declared_strategy, check_dir, check_files, open_excel)
     else:  # files picked
         print("check zip files")
 
 
-def make_excel(declared_strategy, check_dir, check_files):
+def make_excel(declared_strategy, check_dir, check_files, open_excel):
     print("Making Excel...")
 
     df_dirs = pd.DataFrame.from_dict(check_dir, orient="index")
@@ -50,8 +50,6 @@ def make_excel(declared_strategy, check_dir, check_files):
     df_files.rename(columns={"index": "name"}, inplace=True)
 
     sanity_checks_dir = db_man.select_var("sanity_checks_dir")
-    if not isdir(sanity_checks_dir):
-        makedirs(sanity_checks_dir)
 
     excel_output_fpath = join(sanity_checks_dir,
                               f"backtest_reports_check_{declared_strategy}.xlsx")
@@ -126,7 +124,11 @@ def make_excel(declared_strategy, check_dir, check_files):
 
     writer.close()
 
-    subprocess.call(["xdg-open", excel_output_fpath], stderr=subprocess.DEVNULL)
+    if open_excel:
+        if platform == "linux":
+            subprocess.call(["xdg-open", excel_output_fpath], stderr=subprocess.DEVNULL)
+        elif platform == "win32":
+            os.startfile(excel_output_fpath)
 
 
 def hist_from_series(df_col, bins=10):
