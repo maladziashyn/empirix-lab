@@ -3,98 +3,116 @@
   <requires lib="gtk" version="4.0"/>
   <requires lib="Adw" version="1.0"/>
   <template class="SanityCheckScrolledWindow" parent="GtkScrolledWindow">
+
     <child>
-      <object class="AdwClamp">
-        <property name="maximum_size">600</property>
-        <child>
-          <object class="GtkBox">
-            <property name="orientation">vertical</property>
-            <property name="spacing">30</property>
-            <property name="margin_start">30</property>
-            <property name="margin_top">30</property>
-            <property name="margin_end">30</property>
-            <property name="margin_bottom">30</property>
+      <object class="GtkPaned" id="paned">
+        <property name="orientation">vertical</property>
+        <!-- Top Pane -->
+        <child type="start">
+          <object class="AdwClamp">
+            <property name="maximum_size">600</property>
             <child>
-              <object class="AdwPreferencesGroup">
-                <property name="title" translatable="yes">Configuration</property>
-                <!--                 <property name="description" translatable="yes">Configure report layout and settings</property> -->
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="spacing">30</property>
+                <property name="margin_start">30</property>
+                <property name="margin_top">30</property>
+                <property name="margin_end">30</property>
+                <property name="margin_bottom">30</property>
                 <child>
-                  <object class="AdwEntryRow" id="entry_declared_strategy">
-                    <property name="title" translatable="yes">Declared strategy name</property>
-                    <property name="tooltip_text" translatable="yes">Type the official strategy name that will be used in the database to distinguish this strategy. Each html file will be checked for this name.</property>
-                    <property name="show_apply_button">true</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwEntryRow" id="entry_source_dirs">
-                    <property name="title" translatable="yes">Source directories</property>
-                    <property name="tooltip_text" translatable="yes">Select one or more directories.</property>
-                    <property name="editable">0</property>
-                    <child type="suffix">
-                      <object class="GtkButton">
-                        <property name="icon_name">folder</property>
-                        <property name="has_frame">false</property>
-                        <signal name="clicked" handler="btn_callback_01"/>
+                  <object class="AdwPreferencesGroup">
+                    <property name="title" translatable="yes">Configuration</property>
+                    <!--                 <property name="description" translatable="yes">Configure report layout and settings</property> -->
+                    <child>
+                      <object class="AdwEntryRow" id="entry_declared_strategy">
+                        <property name="title" translatable="yes">Declared strategy name</property>
+                        <property name="tooltip_text" translatable="yes">Type the official strategy name that will be used in the database to distinguish this strategy. Each html file will be checked for this name.</property>
+                        <property name="show_apply_button">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwEntryRow" id="entry_source_dirs">
+                        <property name="title" translatable="yes">Source directories</property>
+                        <property name="tooltip_text" translatable="yes">Select one or more directories.</property>
+                        <property name="editable">0</property>
+                        <child type="suffix">
+                          <object class="GtkButton">
+                            <property name="icon_name">folder</property>
+                            <property name="has_frame">false</property>
+                            <signal name="clicked" handler="btn_callback_01"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwEntryRow" id="entry_source_files">
+                        <property name="title" translatable="yes">Source files</property>
+                        <property name="tooltip_text" translatable="yes">Select one or more archives: zip or 7z.</property>
+                        <property name="editable">0</property>
+                        <child type="suffix">
+                          <object class="GtkButton">
+                            <property name="icon_name">folder</property>
+                            <property name="has_frame">false</property>
+                            <signal name="clicked" handler="btn_callback_02"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwSpinRow" id="spin_max_size_megabytes">
+                        <property name="title" translatable="yes">Maximum size, MB</property>
+                        <property name="subtitle" translatable="yes">Maximum allowed size of a file in megabytes</property>
+                        <property name="tooltip_text" translatable="yes">Depending on RAM your computer may fail to process larger files.</property>
+                        <property name="adjustment">
+                          <object class="GtkAdjustment">
+                            <property name="lower">1</property>
+                            <property name="upper">10000</property>
+                            <property name="value">75</property>
+                            <property name="step-increment">1</property>
+                            <property name="page-increment">10</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwSwitchRow" id="switch_show_on_end">
+                        <property name="title" translatable="yes">Show report</property>
+                        <property name="subtitle" translatable="yes">Open report in Excel after completion</property>
+                        <property name="tooltip_text" translatable="yes">Turn on to automatically show Excel file after the process is complete. Otherwise you'll find the output .xlsx in Empirix Lab directory.</property>
+                        <property name="active">true</property>
                       </object>
                     </child>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwEntryRow" id="entry_source_files">
-                    <property name="title" translatable="yes">Source files</property>
-                    <property name="tooltip_text" translatable="yes">Select one or more archives: zip or 7z.</property>
-                    <property name="editable">0</property>
-                    <child type="suffix">
-                      <object class="GtkButton">
-                        <property name="icon_name">folder</property>
-                        <property name="has_frame">false</property>
-                        <signal name="clicked" handler="btn_callback_02"/>
-                      </object>
-                    </child>
+                  <object class="GtkButton">
+                    <property name="label" translatable="yes">Run check</property>
+                    <property name="halign">center</property>
+                    <!--                <property name="width-request">270</property>
+                    <property name="height-request">40</property>-->
+                    <property name="tooltip-text">Sanity check selected sources</property>
+                    <signal name="clicked" handler="btn_callback_03"/>
+                    <style>
+                      <class name="suggested-action"/>
+                    </style>
                   </object>
                 </child>
-                <child>
-                  <object class="AdwSpinRow" id="spin_max_size_megabytes">
-                    <property name="title" translatable="yes">Maximum size, MB</property>
-                    <property name="subtitle" translatable="yes">Maximum allowed size of a file in megabytes</property>
-                    <property name="tooltip_text" translatable="yes">Depending on RAM your computer may fail to process larger files.</property>
-                    <property name="adjustment">
-                      <object class="GtkAdjustment">
-                        <property name="lower">1</property>
-                        <property name="upper">10000</property>
-                        <property name="value">75</property>
-                        <property name="step-increment">1</property>
-                        <property name="page-increment">10</property>
-                      </object>
-                    </property>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwSwitchRow" id="switch_show_on_end">
-                    <property name="title" translatable="yes">Show report</property>
-                    <property name="subtitle" translatable="yes">Open report in Excel after completion</property>
-                    <property name="tooltip_text" translatable="yes">Turn on to automatically show Excel file after the process is complete. Otherwise you'll find the output .xlsx in Empirix Lab directory.</property>
-                    <property name="active">true</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">Run check</property>
-                <property name="halign">center</property>
-                <!--                <property name="width-request">270</property>
-                <property name="height-request">40</property>-->
-                <property name="tooltip-text">Sanity check selected sources</property>
-                <signal name="clicked" handler="btn_callback_03"/>
-                <style>
-                  <class name="suggested-action"/>
-                </style>
+
               </object>
             </child>
           </object>
         </child>
+
+        <!-- Bottom Pane -->
+        <child type="end">
+          <object class="GtkTextView" id="text_view">
+            <property name="width-request">270</property>
+            <property name="height-request">60</property>
+            <property name="wrap-mode">word</property>
+          </object>
+        </child>
       </object>
     </child>
+
   </template>
 </interface>

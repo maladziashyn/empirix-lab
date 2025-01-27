@@ -28,7 +28,7 @@ def main():
 
     with open(join(c.PROJECT_HOME_DIR, "core", "init_work_env.py"), "r") as f:
         contents = f.read()
-    if "remove(c.VAR_DB_FPATH)" in contents:
+    if not "#     remove(c.VAR_DB_FPATH)" in contents:
         print("[BLOCKER] init_work_env.py: comment out the line with db removal.")
         return
 
@@ -62,10 +62,11 @@ def main():
         "is_console": IS_CONSOLE,
     }
     
+    # Add files to _internal
     datas = {
-        join(c.PROJECT_HOME_DIR, "gresource",
-             f"{c.PACKAGE_NAME}.gresource"): "./gresource",
+        join(c.PROJECT_HOME_DIR, "gresource", f"{c.PACKAGE_NAME}.gresource"): "./gresource",
         join(c.PROJECT_HOME_DIR, "core", f"default_variables.json"): "./core",
+        join(c.PROJECT_HOME_DIR, "core", f"db_tables_specs.json"): "./core",
     }
     if platform == "linux":
         # Add XPM logo for Linux desktop-item

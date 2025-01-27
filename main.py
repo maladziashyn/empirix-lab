@@ -1,8 +1,9 @@
 import gi
 gi.require_version("Adw", "1")
+gi.require_version("Gtk", "4.0")
 import sqlite3
 
-from gi.repository import Adw, Gio
+from gi.repository import Adw, Gio, Gtk
 from os.path import isfile
 
 import config as c
@@ -44,8 +45,10 @@ class MyApp(Adw.Application):
             developer_name=c.APP_DEV_NAME,
             version=c.VERSION,
             developers=c.APP_DEVS,
-            copyright=c.APP_COPYRIGHT
+            copyright=c.APP_COPYRIGHT,
+            website=c.WEB_HOMEPAGE
         )
+        about.set_license_type(Gtk.License.GPL_3_0_ONLY)
         # Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
         # about.set_translator_credits(_('translator-credits'))
         about.present(self.props.active_window)

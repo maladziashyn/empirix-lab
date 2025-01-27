@@ -10,11 +10,11 @@ PROJECT_HOME_DIR = dirname(realpath(__file__))
 # UI, about
 APP_NAME = "Empirix Lab"
 APP_COPYRIGHT = "© 2025 Raman Maładziašyn"
-APP_DEV_NAME = "Raman Maładziašyn"
+APP_DEV_NAME = "Raman Maładziašyn & Empirix.ru team"
 APP_DEVS = ["Raman Maładziašyn"]
 
 # Distribution
-VERSION = "25.1.2"
+VERSION = "25.1.27"
 PACKAGE_NAME = "empirix-lab"
 CONTROL_FILE_DESC = f"{APP_NAME}\n Tools for algorithmic trading by Empirix."
 DESKTOP_ITEM_COMMENT = "Tools for algorithmic trading by Empirix"

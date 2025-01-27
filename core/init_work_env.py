@@ -30,7 +30,7 @@ def initialize_home_dir():
 
 
 def initialize_db():
-    # Remove this before packaging
+    # Comment out before packaging
     if isfile(c.VAR_DB_FPATH):
         remove(c.VAR_DB_FPATH)
 

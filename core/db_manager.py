@@ -63,4 +63,5 @@ class DBManagerSQLite(DBManager):
 
 def select_var(var_name):
     with DBManagerSQLite(c.VAR_DB_FPATH) as dbm:
-        return dbm.select_var(var_name)
+        result = dbm.select_var(var_name)
+    return result
