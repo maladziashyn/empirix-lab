@@ -9,8 +9,9 @@ if project_home_dir not in path:
     path.insert(0, project_home_dir)
 
 from config import APP_URL, ARCH_EXTENSIONS
-from core import sanity_check
+# from core import sanity_check
 from core.db_manager import select_var
+from core.sanity_checker import SanityChecker
 
 
 @Gtk.Template(resource_path=f"{APP_URL}/sanity_check.ui")
@@ -107,11 +108,22 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
     @Gtk.Template.Callback("btn_callback_03")
     def run_sanity_check(self, *args):
         # self.text_buffer.set_text("some new text")
-        sanity_check.run_check(
+        # sanity_check.run_check(
+        #     alert_dialog_parent=self.get_ancestor(Adw.ApplicationWindow),
+        #     declared_strategy=self.entry_declared_strategy.get_text(),
+        #     folders_picked=self.folders_picked,
+        #     files_picked=self.files_picked,
+        #     max_size=int(self.spin_max_size_megabytes.get_text()),
+        #     open_excel=self.switch_show_on_end.get_active(),
+        #     text_buffer=self.text_buffer
+        # )
+        sanity_checker = SanityChecker(
             alert_dialog_parent=self.get_ancestor(Adw.ApplicationWindow),
             declared_strategy=self.entry_declared_strategy.get_text(),
             folders_picked=self.folders_picked,
             files_picked=self.files_picked,
             max_size=int(self.spin_max_size_megabytes.get_text()),
-            open_excel=self.switch_show_on_end.get_active()
+            open_excel=self.switch_show_on_end.get_active(),
+            text_buffer=self.text_buffer
         )
+        sanity_checker.run_check()

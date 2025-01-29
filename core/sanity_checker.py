@@ -1,3 +1,7 @@
+import gi
+# gi.require_version("Gtk", "4.0")
+from gi.repository import GLib
+
 import json
 import numpy as np
 import os
@@ -19,118 +23,222 @@ import config as c
 from core import db_manager as db_man
 # from gresource.alert_dialog import AlertDialogTest
 
-
-def main():
-    run_check(None, "adr_ctr_v1", ["/home/rsm/Documents/empirix_ui_home/raw_html/adr_ctr_v1"], None, 75, True)
-
-
-def run_check(alert_dialog_parent, declared_strategy, folders_picked, files_picked, max_size, open_excel, text_buffer):
-    """Check source dirs/files before parsing raw htmls."""
-
-    if not folders_picked and not files_picked:
-        print("nothing selected")
-        # AlertDialogTest().present(parent=alert_dialog_parent)
-    elif folders_picked:
-        # check_dir, check_files = check_src_dir(folders_picked[0])
-        text_buffer.set_text("Checking directories")
-        check_dir, check_files = check_src_dir(declared_strategy, folders_picked, max_size)
-        text_buffer.set_text("Making Excel")
-        make_excel(declared_strategy, check_dir, check_files, open_excel)
-    else:  # files picked
-        print("check zip files")
+# def main():
+#     run_check(None, "adr_ctr_v1", ["/home/rsm/Documents/empirix_ui_home/raw_html/adr_ctr_v1"], None, 75, True)
 
 
-def make_excel(declared_strategy, check_dir, check_files, open_excel):
-    print("Making Excel...")
+class SanityChecker:
+    def __init__(self, alert_dialog_parent, declared_strategy, folders_picked,
+                 files_picked, max_size, open_excel, text_buffer):
+        self.alert_dialog_parent = alert_dialog_parent
+        self.declared_strategy = declared_strategy
+        self.folders_picked = folders_picked
+        self.files_picked = files_picked
+        self.max_size = max_size
+        self.open_excel = open_excel
+        self.text_buffer = text_buffer
 
-    df_dirs = pd.DataFrame.from_dict(check_dir, orient="index")
-    df_dirs.reset_index(inplace=True)
-    df_dirs.rename(columns={"index": "directory"}, inplace=True)
+        self.check_dir = None
+        self.check_files = None
 
-    df_files = pd.DataFrame.from_dict(check_files, orient="index")
-    df_files.reset_index(inplace=True)
-    df_files.rename(columns={"index": "name"}, inplace=True)
+    def run_check(self):
+        """Check source dirs/files before parsing raw htmls."""
+        if not self.folders_picked and not self.files_picked:
+            print("nothing selected")
+            self.text_buffer.set_text("[Start sanity check] Nothing selected")
+            # AlertDialogTest().present(parent=self.alert_dialog_parent)
+        elif self.folders_picked:
+            self.text_buffer.set_text("Checking directories")
+            self.check_dir, self.check_files = self.check_src_dir()
+            self.text_buffer.set_text("Making Excel")
+            self.make_excel()
+        else:  # files picked
+            print("check zip files")
 
-    sanity_checks_dir = db_man.select_var("sanity_checks_dir")
+    def check_src_dir(self):
+        """
+        Sanity check source directory.
 
-    excel_output_fpath = join(sanity_checks_dir,
-                              f"backtest_reports_check_{declared_strategy}.xlsx")
+        :param declared_strategy: str, strategy name
+        :param src_dir: str, folder to check for errors
+        :return: tuple
+        """
 
-    writer = pd.ExcelWriter(excel_output_fpath, engine="xlsxwriter")
+        with open(c.SPECS_TBL_DB, "r") as f:
+            tickers = json.load(f)["mapping_tickers"]
 
-    sh1 = f"{declared_strategy}_dirs"
-    sh2 = f"{declared_strategy}_files"
-    sh3 = f"{declared_strategy}_distribs"
+        dirs_all = dict()  # non-empty dirs
+        files_all = dict()
+        size_total = 0
+        n_files_total = 0
+        subdirs_total = 0
 
-    df_dirs.to_excel(
-        writer,
-        sheet_name=sh1,
-        index=False,
-        freeze_panes=(1, 1)
-    )
+        for folder in self.folders_picked:
+            for root, dirs, files in os.walk(folder):
+                root_basename = basename(root)
+                as_instrument = (tickers[root_basename]
+                                 if root_basename in tickers.keys()
+                                 else None)
 
-    df_files.to_excel(
-        writer,
-        sheet_name=sh2,
-        index=False,
-        freeze_panes=(1, 1)
-    )
+                # Delete long path, leave root as "/"
+                short_root = root.replace(folder, "")
+                short_root = os.sep if not short_root else short_root
 
-    st_col = 0
-    for col in ["size_MB", "i_init_equity", "i_fin_equity",
-                "p_count", "d_pos_total", "d_closed_pos",
-                "ticks_coverage", "orders_errors", "orders_merged"]:
+                dirs_all[short_root] = {
+                    "basename": root_basename,  # only dir name, not full path
+                    "as_instrument": as_instrument,  # e.g. audusd as AUD/USD
+                    "subdirs": len(dirs),  # subdirs count inside dir
+                    "n_files": len(files),  # files count inside dir
+                    "files_MB": 0.0  # sum of files sizes inside dir
+                }
 
-        df_hist = hist_from_series(df_files[col])
-        df_hist.to_excel(
+                subdirs_total += len(dirs)
+                n_files_total += len(files)
+
+                if files:
+                    print(f"Looking into dir {root}")
+                    add_to_files_all = pre_check_files_all(
+                        declared_strategy, as_instrument, root, files, max_size)
+                    files_all.update(add_to_files_all)
+
+                    for f in files:
+                        full_fpath = join(root, f)
+                        fsize = round(getsize(full_fpath) / (1024**2), 2)
+                        size_total += fsize
+                        dirs_all[short_root]["files_MB"] += fsize
+
+                    dirs_all[short_root]["files_MB"] = round(
+                        dirs_all[short_root]["files_MB"], 2)
+
+                dirs_all[os.sep]["files_MB"] = round(size_total, 2)
+                dirs_all[os.sep]["n_files"] = n_files_total
+                dirs_all[os.sep]["subdirs"] = subdirs_total
+
+        # print("Complete")
+        return dirs_all, files_all
+
+
+
+    def make_excel(self):
+        print("Making Excel...")
+
+        df_dirs = pd.DataFrame.from_dict(check_dir, orient="index")
+        df_dirs.reset_index(inplace=True)
+        df_dirs.rename(columns={"index": "directory"}, inplace=True)
+
+        df_files = pd.DataFrame.from_dict(check_files, orient="index")
+        df_files.reset_index(inplace=True)
+        df_files.rename(columns={"index": "name"}, inplace=True)
+
+        sanity_checks_dir = db_man.select_var("sanity_checks_dir")
+
+        excel_output_fpath = join(sanity_checks_dir,
+                                f"backtest_reports_check_{declared_strategy}.xlsx")
+
+        writer = pd.ExcelWriter(excel_output_fpath, engine="xlsxwriter")
+
+        sh1 = f"{declared_strategy}_dirs"
+        sh2 = f"{declared_strategy}_files"
+        sh3 = f"{declared_strategy}_distribs"
+
+        df_dirs.to_excel(
             writer,
-            sheet_name=sh3,
+            sheet_name=sh1,
             index=False,
-            startrow=1,
-            startcol=st_col
+            freeze_panes=(1, 1)
         )
-        worksheet = writer.sheets[sh3]
-        worksheet.write(0, st_col, col)
 
-        st_col += 4
+        df_files.to_excel(
+            writer,
+            sheet_name=sh2,
+            index=False,
+            freeze_panes=(1, 1)
+        )
 
-    # Format sheet 1:
-    worksheet = writer.sheets[sh1]
-    # Get df dimensions
-    max_row, max_col = df_dirs.shape
-    # Widen columns
-    for idx, col in enumerate(df_dirs):  # iterate over all columns
-        series = df_dirs[col]
-        max_len = max((
-            series.astype(str).map(len).max(),  # len of largest item
-            len(str(series.name))  # len of column name/header
-        )) + 4  # add a little extra space
-        worksheet.set_column(idx, idx, max_len)  # set column width
-    # # Set autofilter
-    worksheet.autofilter(0, 0, max_row, max_col - 1)
+        st_col = 0
+        for col in ["size_MB", "i_init_equity", "i_fin_equity",
+                    "p_count", "d_pos_total", "d_closed_pos",
+                    "ticks_coverage", "orders_errors", "orders_merged"]:
 
-    # Format sheet 2:
-    worksheet = writer.sheets[sh2]
-    # Get df dimensions
-    max_row, max_col = df_files.shape
-    # Widen columns
-    for idx, col in enumerate(df_files):  # iterate over all columns
-        series = df_files[col]
-        max_len = max((
-            series.astype(str).map(len).max(),  # len of largest item
-            len(str(series.name))  # len of column name/header
-        )) + 4  # add a little extra space
-        worksheet.set_column(idx, idx, max_len)  # set column width
-    # # Set autofilter
-    worksheet.autofilter(0, 0, max_row, max_col - 1)
+            df_hist = hist_from_series(df_files[col])
+            df_hist.to_excel(
+                writer,
+                sheet_name=sh3,
+                index=False,
+                startrow=1,
+                startcol=st_col
+            )
+            worksheet = writer.sheets[sh3]
+            worksheet.write(0, st_col, col)
 
-    writer.close()
+            st_col += 4
 
-    if open_excel:
-        if platform == "linux":
-            subprocess.call(["xdg-open", excel_output_fpath], stderr=subprocess.DEVNULL)
-        elif platform == "win32":
-            os.startfile(excel_output_fpath)
+        # Format sheet 1:
+        worksheet = writer.sheets[sh1]
+        # Get df dimensions
+        max_row, max_col = df_dirs.shape
+        # Widen columns
+        for idx, col in enumerate(df_dirs):  # iterate over all columns
+            series = df_dirs[col]
+            max_len = max((
+                series.astype(str).map(len).max(),  # len of largest item
+                len(str(series.name))  # len of column name/header
+            )) + 4  # add a little extra space
+            worksheet.set_column(idx, idx, max_len)  # set column width
+        # # Set autofilter
+        worksheet.autofilter(0, 0, max_row, max_col - 1)
+
+        # Format sheet 2:
+        worksheet = writer.sheets[sh2]
+        # Get df dimensions
+        max_row, max_col = df_files.shape
+        # Widen columns
+        for idx, col in enumerate(df_files):  # iterate over all columns
+            series = df_files[col]
+            max_len = max((
+                series.astype(str).map(len).max(),  # len of largest item
+                len(str(series.name))  # len of column name/header
+            )) + 4  # add a little extra space
+            worksheet.set_column(idx, idx, max_len)  # set column width
+        # # Set autofilter
+        worksheet.autofilter(0, 0, max_row, max_col - 1)
+
+        writer.close()
+
+        if open_excel:
+            if platform == "linux":
+                subprocess.call(["xdg-open", excel_output_fpath], stderr=subprocess.DEVNULL)
+            elif platform == "win32":
+                os.startfile(excel_output_fpath)
+
+    def pre_check_files_all(self, ins_mapped, root, files, max_size):
+        """
+        Check all source htmls before parsing them and moving results into
+        the database.
+
+        :param declared_strategy: str, actually it's the strategy name
+        :param ins_mapped: str, file dir mapped as default instrument, comes in
+            as basename of the file's home dir
+        :param root: str, full path to instrument folder, like "audusd"
+        :param files: list of files in folder
+        :return: dict
+        """
+
+        files_stats = dict()
+        full_fpaths = [join(root, f) for f in files]
+
+        with ProcessPoolExecutor() as executor:
+            results = executor.map(
+                pre_check_file_one,
+                repeat(declared_strategy, len(files)),
+                repeat(ins_mapped, len(files)),
+                full_fpaths,
+                repeat(max_size, len(files))
+            )
+            for res in results:
+                files_stats.update(res)
+
+        return files_stats
 
 
 def hist_from_series(df_col, bins=10):
@@ -162,95 +270,10 @@ def hist_from_series(df_col, bins=10):
     return pd.DataFrame(data={"bin": a_bin, "count": a_count, "perc": a_perc})
 
 
-def check_src_dir(declared_strategy, folders_picked, max_size):
-    """
-    Sanity check source directory.
-
-    :param declared_strategy: str, strategy name
-    :param src_dir: str, folder to check for errors
-    :return: TODO
-    """
-
-    with open(c.SPECS_TBL_DB, "r") as f:
-        tickers = json.load(f)["mapping_tickers"]
-
-    dirs_all = dict()  # non-empty dirs
-    files_all = dict()
-    size_total = 0
-    n_files_total = 0
-    subdirs_total = 0
-
-    for folder in folders_picked:
-        for root, dirs, files in os.walk(folder):
-            root_basename = basename(root)
-            as_instrument = tickers[root_basename] if root_basename in tickers.keys() else None
-
-            # Delete long path, leave root as "/"
-            short_root = root.replace(folder, "")
-            short_root = os.sep if not short_root else short_root
-
-            dirs_all[short_root] = {
-                "basename": root_basename,  # only dir name, not full path
-                "as_instrument": as_instrument,  # e.g. audusd as AUD/USD
-                "subdirs": len(dirs),  # subdirs count inside dir
-                "n_files": len(files),  # files count inside dir
-                "files_MB": 0.0  # sum of files sizes inside dir
-            }
-
-            subdirs_total += len(dirs)
-            n_files_total += len(files)
-
-            if files:
-                print(f"Looking into dir {root}")
-                add_to_files_all = pre_check_files_all(
-                    declared_strategy, as_instrument, root, files, max_size)
-                files_all.update(add_to_files_all)
-
-                for f in files:
-                    full_fpath = join(root, f)
-                    fsize = round(getsize(full_fpath) / (1024**2), 2)
-                    size_total += fsize
-                    dirs_all[short_root]["files_MB"] += fsize
-
-                dirs_all[short_root]["files_MB"] = round(
-                    dirs_all[short_root]["files_MB"], 2)
-
-            dirs_all[os.sep]["files_MB"] = round(size_total, 2)
-            dirs_all[os.sep]["n_files"] = n_files_total
-            dirs_all[os.sep]["subdirs"] = subdirs_total
-
-    # print("Complete")
-    return dirs_all, files_all
 
 
-def pre_check_files_all(declared_strategy, ins_mapped, root, files, max_size):
-    """
-    Check all source htmls before parsing them and moving results into
-    the database.
 
-    :param declared_strategy: str, actually it's the strategy name
-    :param ins_mapped: str, file dir mapped as default instrument, comes in
-        as basename of the file's home dir
-    :param root: str, full path to instrument folder, like "audusd"
-    :param files: list of files in folder
-    :return: dict
-    """
 
-    files_stats = dict()
-    full_fpaths = [join(root, f) for f in files]
-
-    with ProcessPoolExecutor() as executor:
-        results = executor.map(
-            pre_check_file_one,
-            repeat(declared_strategy, len(files)),
-            repeat(ins_mapped, len(files)),
-            full_fpaths,
-            repeat(max_size, len(files))
-        )
-        for res in results:
-            files_stats.update(res)
-
-    return files_stats
 
 
 def pre_check_file_one(declared_strategy, ins_mapped, full_fpath, max_size):

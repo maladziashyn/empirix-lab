@@ -57,7 +57,7 @@
                     </property>
                   </object>
                 </child>
-                <child>
+                <!--<child>
                   <object class="GtkStackPage" id="monte_carlo_stack_page">
                     <property name="name">monte_carlo_stack_page</property>
                     <property name="title" translatable="yes">Monte Carlo Simulation</property>
@@ -65,7 +65,7 @@
                       <object class="MonteCarloScrolledWindow" id="monte_carlo_scrolled_window"/>
                     </property>
                   </object>
-                </child>
+                </child>-->
               </object>
             </property>
           </object>
