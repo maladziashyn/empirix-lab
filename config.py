@@ -4,7 +4,7 @@ from os.path import dirname, expanduser, join, realpath
 
 
 # General
-GRESOURCE_RECOMPILE = True  # set to False in PRODUCTION
+GRESOURCE_RECOMPILE = False  # set to False in PRODUCTION
 PROJECT_HOME_DIR = dirname(realpath(__file__))
 
 # UI, about
@@ -14,7 +14,7 @@ APP_DEV_NAME = "Raman Maładziašyn & Empirix.ru team"
 APP_DEVS = ["Raman Maładziašyn"]
 
 # Distribution
-VERSION = "25.1.27"
+VERSION = "25.1"
 PACKAGE_NAME = "empirix-lab"
 CONTROL_FILE_DESC = f"{APP_NAME}\n Tools for algorithmic trading by Empirix."
 DESKTOP_ITEM_COMMENT = "Tools for algorithmic trading by Empirix"

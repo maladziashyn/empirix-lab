@@ -9,22 +9,21 @@ if project_home_dir not in path:
     path.insert(0, project_home_dir)
 
 from config import APP_URL, ARCH_EXTENSIONS
-# from core import sanity_check
+from core import sanity_check
 from core.db_manager import select_var
-from core.sanity_checker import SanityChecker
 
 
 @Gtk.Template(resource_path=f"{APP_URL}/sanity_check.ui")
 class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
     __gtype_name__ = "SanityCheckScrolledWindow"
 
-    paned = Gtk.Template.Child()
+    # paned = Gtk.Template.Child()
     entry_declared_strategy = Gtk.Template.Child()
     entry_source_dirs = Gtk.Template.Child()
     entry_source_files = Gtk.Template.Child()
     spin_max_size_megabytes = Gtk.Template.Child()
     switch_show_on_end = Gtk.Template.Child()
-    text_view = Gtk.Template.Child()
+    # text_view = Gtk.Template.Child()
 
     initial_folder = Gio.File.new_for_path(select_var("file_dialog_initial_folder"))
 
@@ -32,10 +31,10 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
         super().__init__(**kwargs)
         self.files_picked = None
         self.folders_picked = None
-        self.paned.set_shrink_start_child(False)
+        # self.paned.set_shrink_start_child(False)
 
         # Access the associated Gtk.TextBuffer
-        self.text_buffer = self.text_view.get_buffer()
+        # self.text_buffer = self.text_view.get_buffer()
         # self.text_buffer.set_text("Welcome to Gtk.TextView!\nFeel free to edit this text.")
 
 
@@ -108,22 +107,12 @@ class SanityCheckScrolledWindow(Gtk.ScrolledWindow):
     @Gtk.Template.Callback("btn_callback_03")
     def run_sanity_check(self, *args):
         # self.text_buffer.set_text("some new text")
-        # sanity_check.run_check(
-        #     alert_dialog_parent=self.get_ancestor(Adw.ApplicationWindow),
-        #     declared_strategy=self.entry_declared_strategy.get_text(),
-        #     folders_picked=self.folders_picked,
-        #     files_picked=self.files_picked,
-        #     max_size=int(self.spin_max_size_megabytes.get_text()),
-        #     open_excel=self.switch_show_on_end.get_active(),
-        #     text_buffer=self.text_buffer
-        # )
-        sanity_checker = SanityChecker(
+        sanity_check.run_check(
             alert_dialog_parent=self.get_ancestor(Adw.ApplicationWindow),
             declared_strategy=self.entry_declared_strategy.get_text(),
             folders_picked=self.folders_picked,
             files_picked=self.files_picked,
             max_size=int(self.spin_max_size_megabytes.get_text()),
             open_excel=self.switch_show_on_end.get_active(),
-            text_buffer=self.text_buffer
+            text_buffer=None
         )
-        sanity_checker.run_check()

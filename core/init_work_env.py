@@ -1,6 +1,6 @@
 import json
 
-from os import makedirs, remove
+from os import makedirs
 from os.path import dirname, join, isdir, isfile, realpath
 from sys import path
 project_home_dir = dirname(dirname(realpath(__file__)))
@@ -30,9 +30,10 @@ def initialize_home_dir():
 
 
 def initialize_db():
-    # Comment out before packaging
-    if isfile(c.VAR_DB_FPATH):
-        remove(c.VAR_DB_FPATH)
+    # # Comment out before packaging
+    # if isfile(c.VAR_DB_FPATH):
+    #     from os import remove
+    #     remove(c.VAR_DB_FPATH)
 
     if not isfile(c.VAR_DB_FPATH):
         with open(c.DEFAULT_VARS_JSON, "r") as f:

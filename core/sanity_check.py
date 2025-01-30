@@ -20,10 +20,6 @@ from core import db_manager as db_man
 # from gresource.alert_dialog import AlertDialogTest
 
 
-def main():
-    run_check(None, "adr_ctr_v1", ["/home/rsm/Documents/empirix_ui_home/raw_html/adr_ctr_v1"], None, 75, True)
-
-
 def run_check(alert_dialog_parent, declared_strategy, folders_picked, files_picked, max_size, open_excel, text_buffer):
     """Check source dirs/files before parsing raw htmls."""
 
@@ -32,9 +28,9 @@ def run_check(alert_dialog_parent, declared_strategy, folders_picked, files_pick
         # AlertDialogTest().present(parent=alert_dialog_parent)
     elif folders_picked:
         # check_dir, check_files = check_src_dir(folders_picked[0])
-        text_buffer.set_text("Checking directories")
+        # text_buffer.set_text("Checking directories")
         check_dir, check_files = check_src_dir(declared_strategy, folders_picked, max_size)
-        text_buffer.set_text("Making Excel")
+        # text_buffer.set_text("Making Excel")
         make_excel(declared_strategy, check_dir, check_files, open_excel)
     else:  # files picked
         print("check zip files")
@@ -441,7 +437,3 @@ def clean_value(raw_val):
     else:
         # This is for empty table cells
         return None
-
-
-if __name__ == "__main__":
-    main()
