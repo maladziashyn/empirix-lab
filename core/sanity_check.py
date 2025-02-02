@@ -20,20 +20,18 @@ from core import db_manager as db_man
 # from gresource.alert_dialog import AlertDialogTest
 
 
-def run_check(alert_dialog_parent, declared_strategy, folders_picked, files_picked, max_size, open_excel, text_buffer):
-    """Check source dirs/files before parsing raw htmls."""
+def run_check(alert_dialog_parent, declared_strategy, selected_dir, max_size, open_excel, text_buffer):
+    """Check source dir before parsing raw htmls."""
 
-    if not folders_picked and not files_picked:
+    if not selected_dir:
         print("nothing selected")
         # AlertDialogTest().present(parent=alert_dialog_parent)
-    elif folders_picked:
-        # check_dir, check_files = check_src_dir(folders_picked[0])
+    else:
+        # check_dir, check_files = check_src_dir(selected_dir[0])
         # text_buffer.set_text("Checking directories")
-        check_dir, check_files = check_src_dir(declared_strategy, folders_picked, max_size)
+        check_dir, check_files = check_src_dir(declared_strategy, selected_dir, max_size)
         # text_buffer.set_text("Making Excel")
         make_excel(declared_strategy, check_dir, check_files, open_excel)
-    else:  # files picked
-        print("check zip files")
 
 
 def make_excel(declared_strategy, check_dir, check_files, open_excel):
@@ -124,7 +122,10 @@ def make_excel(declared_strategy, check_dir, check_files, open_excel):
 
     if open_excel:
         if platform == "linux":
-            subprocess.call(["xdg-open", excel_output_fpath], stderr=subprocess.DEVNULL)
+            subprocess.call(
+                ["xdg-open", excel_output_fpath],
+                stderr=subprocess.DEVNULL
+            )
         elif platform == "win32":
             os.startfile(excel_output_fpath)
 
@@ -158,7 +159,7 @@ def hist_from_series(df_col, bins=10):
     return pd.DataFrame(data={"bin": a_bin, "count": a_count, "perc": a_perc})
 
 
-def check_src_dir(declared_strategy, folders_picked, max_size):
+def check_src_dir(declared_strategy, selected_dir, max_size):
     """
     Sanity check source directory.
 
@@ -176,44 +177,44 @@ def check_src_dir(declared_strategy, folders_picked, max_size):
     n_files_total = 0
     subdirs_total = 0
 
-    for folder in folders_picked:
-        for root, dirs, files in os.walk(folder):
-            root_basename = basename(root)
-            as_instrument = tickers[root_basename] if root_basename in tickers.keys() else None
+    for root, dirs, files in os.walk(selected_dir):
+        root_basename = basename(root)
+        as_instrument = (tickers[root_basename]
+                         if root_basename in tickers.keys() else None)
 
-            # Delete long path, leave root as "/"
-            short_root = root.replace(folder, "")
-            short_root = os.sep if not short_root else short_root
+        # Delete long path, leave root as "/"
+        short_root = root.replace(selected_dir, "")
+        short_root = os.sep if not short_root else short_root
 
-            dirs_all[short_root] = {
-                "basename": root_basename,  # only dir name, not full path
-                "as_instrument": as_instrument,  # e.g. audusd as AUD/USD
-                "subdirs": len(dirs),  # subdirs count inside dir
-                "n_files": len(files),  # files count inside dir
-                "files_MB": 0.0  # sum of files sizes inside dir
-            }
+        dirs_all[short_root] = {
+            "basename": root_basename,  # only dir name, not full path
+            "as_instrument": as_instrument,  # e.g. audusd as AUD/USD
+            "subdirs": len(dirs),  # subdirs count inside dir
+            "n_files": len(files),  # files count inside dir
+            "files_MB": 0.0  # sum of files sizes inside dir
+        }
 
-            subdirs_total += len(dirs)
-            n_files_total += len(files)
+        subdirs_total += len(dirs)
+        n_files_total += len(files)
 
-            if files:
-                print(f"Looking into dir {root}")
-                add_to_files_all = pre_check_files_all(
-                    declared_strategy, as_instrument, root, files, max_size)
-                files_all.update(add_to_files_all)
+        if files:
+            print(f"Looking into dir {root}")
+            add_to_files_all = pre_check_files_all(
+                declared_strategy, as_instrument, root, files, max_size)
+            files_all.update(add_to_files_all)
 
-                for f in files:
-                    full_fpath = join(root, f)
-                    fsize = round(getsize(full_fpath) / (1024**2), 2)
-                    size_total += fsize
-                    dirs_all[short_root]["files_MB"] += fsize
+            for f in files:
+                full_fpath = join(root, f)
+                fsize = round(getsize(full_fpath) / (1024**2), 2)
+                size_total += fsize
+                dirs_all[short_root]["files_MB"] += fsize
 
-                dirs_all[short_root]["files_MB"] = round(
-                    dirs_all[short_root]["files_MB"], 2)
+            dirs_all[short_root]["files_MB"] = round(
+                dirs_all[short_root]["files_MB"], 2)
 
-            dirs_all[os.sep]["files_MB"] = round(size_total, 2)
-            dirs_all[os.sep]["n_files"] = n_files_total
-            dirs_all[os.sep]["subdirs"] = subdirs_total
+        dirs_all[os.sep]["files_MB"] = round(size_total, 2)
+        dirs_all[os.sep]["n_files"] = n_files_total
+        dirs_all[os.sep]["subdirs"] = subdirs_total
 
     # print("Complete")
     return dirs_all, files_all

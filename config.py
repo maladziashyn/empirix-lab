@@ -4,7 +4,7 @@ from os.path import dirname, expanduser, join, realpath
 
 
 # General
-GRESOURCE_RECOMPILE = False  # set to False in PRODUCTION
+GRESOURCE_RECOMPILE = True  # set to False in PRODUCTION
 PROJECT_HOME_DIR = dirname(realpath(__file__))
 
 # UI, about
@@ -39,9 +39,6 @@ VAR_TBL_NAME = "state_var"
 DEFAULT_VARS_JSON = join(PROJECT_HOME_DIR, "core", "default_variables.json")
 DEFAULT_WORK_DIR = join(expanduser("~"), "Documents", APP_NAME)
 DEFAULT_SANITY_CHECKS_DIR = "sanity_checks"
-
-# Gtk.FileDialog, FileFilter, etc.
-ARCH_EXTENSIONS = ["zip", "7z", "rar"]
 
 # Specs
 SPECS_TBL_DB = join(PROJECT_HOME_DIR, "core", "db_tables_specs.json")

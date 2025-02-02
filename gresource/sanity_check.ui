@@ -25,29 +25,15 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwEntryRow" id="entry_source_dirs">
-                    <property name="title" translatable="yes">Source directories</property>
-                    <property name="tooltip_text" translatable="yes">Select one or more directories.</property>
+                  <object class="AdwEntryRow" id="entry_source_dir">
+                    <property name="title" translatable="yes">Source directory</property>
+                    <property name="tooltip_text" translatable="yes">Select source directory from dialog window.</property>
                     <property name="editable">0</property>
                     <child type="suffix">
                       <object class="GtkButton">
                         <property name="icon_name">folder</property>
                         <property name="has_frame">false</property>
                         <signal name="clicked" handler="btn_callback_01"/>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwEntryRow" id="entry_source_files">
-                    <property name="title" translatable="yes">Source files</property>
-                    <property name="tooltip_text" translatable="yes">Select one or more archives: zip or 7z.</property>
-                    <property name="editable">0</property>
-                    <child type="suffix">
-                      <object class="GtkButton">
-                        <property name="icon_name">folder</property>
-                        <property name="has_frame">false</property>
-                        <signal name="clicked" handler="btn_callback_02"/>
                       </object>
                     </child>
                   </object>
