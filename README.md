@@ -1,11 +1,8 @@
-# empirix-lab
+# Empirix Lab
 
 Algorithmic trading tools by Empirix.
 
-## Developer notes
+- Do sanity check on folders with raw html reports
+- Provide detailed statistics on each html report
 
-[Instruction](https://github.com/wingtk/gvsbuild) to use GTK4 in Windows.
-
-Creating installer in Windows: install "Inno Setup 6" and add "C:\Program Files (x86)\Inno Setup 6" to "Path" variable.
-
-For PyInstaller hooks to work, install pyinstaller-hooks-contrib
+[![ko-fi-img](https://github.com/user-attachments/assets/1cabca82-6889-4ac2-9811-cee67754c872)](https://ko-fi.com/rsmlabs)
