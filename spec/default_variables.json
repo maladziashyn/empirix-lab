@@ -7,7 +7,8 @@
   "default_values": {
     "work_dir": {
       "data_type": "2",
-      "value": null
+      "value": null,
+      "startup": true
     },
     "file_dialog_initial_folder": {
       "data_type": "2",
@@ -15,11 +16,13 @@
     },
     "sanity_checks_dir": {
       "data_type": "2",
-      "value": null
+      "value": null,
+      "startup": true
     },
     "sqlite_db_dir": {
       "data_type": "2",
-      "value": null
+      "value": null,
+      "startup": true
     },
     "sqlite_db_name": {
       "data_type": "2",
@@ -28,6 +31,11 @@
     "sqlite_db_fpath": {
       "data_type": "2",
       "value": null
+    },
+    "log_dir": {
+      "data_type": "2",
+      "value": null,
+      "startup": true
     },
     "curves_count": {
       "data_type": "0",

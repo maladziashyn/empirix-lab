@@ -64,9 +64,9 @@ def main():
     
     # Add files to _internal
     datas = {
-        join(c.PROJECT_HOME_DIR, "gresource", f"{c.PACKAGE_NAME}.gresource"): "./gresource",
-        join(c.PROJECT_HOME_DIR, "core", f"default_variables.json"): "./core",
-        join(c.PROJECT_HOME_DIR, "core", f"db_tables_specs.json"): "./core",
+        c.GRESOURCE_BIN: "./gresource",
+        c.DEFAULT_VARS_JSON: f"./{c.SPECS_DIR}",
+        c.SPECS_TBL_DB: f"./{SPECS_DIR}",
     }
     if platform == "linux":
         # Add XPM logo for Linux desktop-item
@@ -84,10 +84,12 @@ def main():
         # In Windows, add icon for .exe, used by PyInstaller
         spec_values.update(
             # {"icon_path": join(c.PROJECT_HOME_DIR, "_distribution", "logo", c.PACKAGE_NAME + ".ico").replace("\\", "\\\\")}
-            {"icon_path": join(c.PROJECT_HOME_DIR, "_distribution", "logo", c.PACKAGE_NAME + ".ico").replace("\\", "\\\\")}
+            {"icon_path": join(c.PROJECT_HOME_DIR, "_distribution", "logo",
+                               c.PACKAGE_NAME + ".ico").replace("\\", "\\\\")}
         )
         datas.update(
-            {join(c.PROJECT_HOME_DIR, "_distribution", "logo", c.PACKAGE_NAME + ".ico"): "./"}
+            {join(c.PROJECT_HOME_DIR, "_distribution", "logo",
+                  c.PACKAGE_NAME + ".ico"): "./"}
         )
 
     # Finalize spec values by ading datas
@@ -177,9 +179,11 @@ def generate_inno_script(target_dirpath):
         "license_fpath": join(c.PROJECT_HOME_DIR, "LICENSE"),
         "output_dir": target_dirpath,
         "output_base_filename": c.SETUP_FILE_WINDOWS,
-        "setup_icon_file": join(c.PROJECT_HOME_DIR, "_distribution", "logo", c.PACKAGE_NAME + ".ico"),
+        "setup_icon_file": join(c.PROJECT_HOME_DIR, "_distribution", "logo",
+                                c.PACKAGE_NAME + ".ico"),
         "installed_files_homedir": join(target_dirpath, c.PACKAGE_NAME),
-        "installed_files_internal": join(target_dirpath, c.PACKAGE_NAME, c.INTERNAL_DIR),
+        "installed_files_internal": join(target_dirpath, c.PACKAGE_NAME,
+                                         c.INTERNAL_DIR),
         "internal_dir": c.INTERNAL_DIR,
         "hash_my_app_name": "{#MyAppName}",
         "hash_my_app_icon_name": "{#MyAppIconName}",
@@ -188,7 +192,7 @@ def generate_inno_script(target_dirpath):
         "hash_my_app_url": "{#MyAppURL}",
         "hash_my_app_exe_name": "{#MyAppExeName}",
         "hash_string_change": "{#StringChange",
-        "app_guid": "{{41EAD664-F1A8-435A-98D9-0A644A6E7AC2}"
+        "app_guid": "{{" + c.APP_GUID + "}",
     }
     
     # Generate .iss file
@@ -288,7 +292,8 @@ def create_desktop_item(apps_dir):
             f"Comment={c.DESKTOP_ITEM_COMMENT}\n"
             f"Exec=/usr/local/bin/{c.PACKAGE_NAME}/{c.PACKAGE_NAME}\n"
             f"TryExec=/usr/local/bin/{c.PACKAGE_NAME}/{c.PACKAGE_NAME}\n"
-            f"Icon=/usr/local/bin/{c.PACKAGE_NAME}/_internal/logo/{c.DESKTOP_ITEM_LOGO}\n"
+            f"Icon=/usr/local/bin/{c.PACKAGE_NAME}/_internal/logo/" \
+                f"{c.DESKTOP_ITEM_LOGO}\n"
             f"Terminal={"true" if IS_CONSOLE else "false"}\n"
             "Type=Application\n"
             "Categories=Finance;Math;Office;\n"

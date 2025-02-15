@@ -14,9 +14,9 @@ if __name__ == "__main__":
     from os.path import isfile
 
     import config as c
-
-    from core import init_work_env
-    init_work_env.main()  # must init work env before load_widgets as they need the DB to use.
+    import init_env
+    # Must init work environment before load_widgets as they depend on DB.
+    init_env.main()
 
     from gresource import compile_register
     from gresource import load_widgets

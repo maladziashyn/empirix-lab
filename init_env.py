@@ -1,12 +1,17 @@
+"""
+init_env.py
+
+This module provides funcitons to initialize work environment.
+Its "main" function is called from app's entry point - ./main.py.
+
+- create database with variables
+- make working directory tree.
+"""
+
 import json
 
 from os import makedirs
-from os.path import dirname, join, isdir, isfile, realpath
-from sys import path
-project_home_dir = dirname(dirname(realpath(__file__)))
-if project_home_dir not in path:
-    path.insert(0, project_home_dir)
-
+from os.path import join, isdir, isfile
 import config as c
 
 from core import db_manager as db_man
@@ -17,30 +22,34 @@ def main():
     Create DB file and make work directories.
     """
 
-    initialize_db()
-    initialize_home_dir()
+    with open(c.DEFAULT_VARS_JSON, "r") as f:
+        default_vars = json.load(f)
+
+    data_types = default_vars["data_types"]
+    default_values = default_vars["default_values"]
+
+    initialize_db(data_types, default_values)
+    initialize_home_dir(default_values)
 
 
-def initialize_home_dir():
-    # Create work dir and sanity_checks if not exist
-    for dir_name in ["work_dir", "sanity_checks_dir", "sqlite_db_dir"]:
-        dir_path = db_man.select_var(dir_name)
-        if not isdir(dir_path):
-            makedirs(dir_path)
+def initialize_home_dir(default_values):
+    """Create home directory tree."""
+
+    for key, value in default_values.items():
+        if "startup" in value and value["startup"]:
+            dir_path = db_man.select_var(key)
+            if not isdir(dir_path):
+                makedirs(dir_path)
 
 
-def initialize_db():
-    # Comment out before packaging
+def initialize_db(data_types, default_values):
+    # Comment out before packaging >>
     if isfile(c.VAR_DB_FPATH):
         from os import remove
         remove(c.VAR_DB_FPATH)
+    # Comment out before packaging <<
 
     if not isfile(c.VAR_DB_FPATH):
-        with open(c.DEFAULT_VARS_JSON, "r") as f:
-            default_vars = json.load(f)
-        data_types = default_vars["data_types"]
-        default_values = default_vars["default_values"]
-
         # Update Empirix default variables for insertion
         default_values["work_dir"]["value"] = c.DEFAULT_WORK_DIR
         default_values["file_dialog_initial_folder"]["value"] = c.DEFAULT_WORK_DIR
@@ -57,6 +66,12 @@ def initialize_db():
             default_values["sqlite_db_dir"]["value"],
             c.DEFAULT_SQLITE_DB_NAME
         )
+        default_values["log_dir"]["value"] = join(
+            c.DEFAULT_WORK_DIR,
+            c.DEFAULT_LOG_DIR
+        )
+
+        # log_dir
 
         qry_insert = f"INSERT INTO {c.VAR_TBL_NAME}(var_name, data_type, " \
             f"{", ".join(data_types.values())}) VALUES (?, ?, ?, ?, ?);"

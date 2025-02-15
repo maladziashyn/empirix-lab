@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="Adw" version="1.0"/>
+  <template class="ProcessRawScrolledWindow" parent="GtkScrolledWindow">
+    <child>
+      <object class="AdwClamp">
+        <property name="maximum_size">600</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="spacing">30</property>
+            <property name="margin_start">30</property>
+            <property name="margin_top">30</property>
+            <property name="margin_end">30</property>
+            <property name="margin_bottom">30</property>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Configuration</property>
+                <child>
+                  <object class="AdwEntryRow" id="entry_source_dir">
+                    <property name="title" translatable="yes">Source directory</property>
+                    <property name="tooltip_text" translatable="yes">Select source directory from dialog window.</property>
+                    <property name="editable">0</property>
+                    <child type="suffix">
+                      <object class="GtkButton">
+                        <property name="icon_name">folder</property>
+                        <property name="has_frame">false</property>
+                        <signal name="clicked" handler="btn_callback_01"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="yes">Run</property>
+                <property name="halign">center</property>
+                <property name="tooltip-text">Process html files from selected source.</property>
+                <signal name="clicked" handler="btn_callback_02"/>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="yes">Insert into db</property>
+                <property name="halign">center</property>
+                <property name="tooltip-text">Insert data into db.</property>
+                <signal name="clicked" handler="btn_callback_03"/>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

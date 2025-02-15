@@ -49,6 +49,15 @@
               <object class="GtkStack" id="stack">
                 <property name="transition-type">crossfade</property>
                 <child>
+                  <object class="GtkStackPage" id="process_raw_stack_page">
+                    <property name="name">process_raw_stack_page</property>
+                    <property name="title" translatable="yes">Process html</property>
+                    <property name="child">
+                      <object class="ProcessRawScrolledWindow" id="process_raw_scrolled_window"/>
+                    </property>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkStackPage" id="sanity_check_stack_page">
                     <property name="name">html_sanity_check_stack_page</property>
                     <property name="title" translatable="yes">Sanity check backtests</property>
