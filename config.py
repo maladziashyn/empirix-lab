@@ -39,6 +39,8 @@ VAR_TBL_NAME = "state_var"
 DEFAULT_VARS_JSON = join(PROJECT_HOME_DIR, "core", "default_variables.json")
 DEFAULT_WORK_DIR = join(expanduser("~"), "Documents", APP_NAME)
 DEFAULT_SANITY_CHECKS_DIR = "sanity_checks"
+DEFAULT_SQLITE_DB_DIR = "my_db"
+DEFAULT_SQLITE_DB_NAME = "my.db"
 
 # Specs
 SPECS_TBL_DB = join(PROJECT_HOME_DIR, "core", "db_tables_specs.json")

@@ -23,17 +23,17 @@ def main():
 
 def initialize_home_dir():
     # Create work dir and sanity_checks if not exist
-    for dir_name in ["work_dir", "sanity_checks_dir"]:
+    for dir_name in ["work_dir", "sanity_checks_dir", "sqlite_db_dir"]:
         dir_path = db_man.select_var(dir_name)
         if not isdir(dir_path):
             makedirs(dir_path)
 
 
 def initialize_db():
-    # # Comment out before packaging
-    # if isfile(c.VAR_DB_FPATH):
-    #     from os import remove
-    #     remove(c.VAR_DB_FPATH)
+    # Comment out before packaging
+    if isfile(c.VAR_DB_FPATH):
+        from os import remove
+        remove(c.VAR_DB_FPATH)
 
     if not isfile(c.VAR_DB_FPATH):
         with open(c.DEFAULT_VARS_JSON, "r") as f:
@@ -44,9 +44,22 @@ def initialize_db():
         # Update Empirix default variables for insertion
         default_values["work_dir"]["value"] = c.DEFAULT_WORK_DIR
         default_values["file_dialog_initial_folder"]["value"] = c.DEFAULT_WORK_DIR
-        default_values["sanity_checks_dir"]["value"] = join(c.DEFAULT_WORK_DIR, c.DEFAULT_SANITY_CHECKS_DIR)
+        default_values["sanity_checks_dir"]["value"] = join(
+            c.DEFAULT_WORK_DIR,
+            c.DEFAULT_SANITY_CHECKS_DIR
+        )
+        default_values["sqlite_db_dir"]["value"] = join(
+            c.DEFAULT_WORK_DIR,
+            c.DEFAULT_SQLITE_DB_DIR
+        )
+        default_values["sqlite_db_name"]["value"] = c.DEFAULT_SQLITE_DB_NAME
+        default_values["sqlite_db_fpath"]["value"] = join(
+            default_values["sqlite_db_dir"]["value"],
+            c.DEFAULT_SQLITE_DB_NAME
+        )
 
-        qry_insert = f"INSERT INTO {c.VAR_TBL_NAME}(var_name, data_type, {", ".join(data_types.values())}) VALUES (?, ?, ?, ?, ?);"
+        qry_insert = f"INSERT INTO {c.VAR_TBL_NAME}(var_name, data_type, " \
+            f"{", ".join(data_types.values())}) VALUES (?, ?, ?, ?, ?);"
 
         insert_data = list()
         val_count = len(data_types)

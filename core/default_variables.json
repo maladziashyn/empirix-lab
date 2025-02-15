@@ -17,6 +17,18 @@
       "data_type": "2",
       "value": null
     },
+    "sqlite_db_dir": {
+      "data_type": "2",
+      "value": null
+    },
+    "sqlite_db_name": {
+      "data_type": "2",
+      "value": null
+    },
+    "sqlite_db_fpath": {
+      "data_type": "2",
+      "value": null
+    },
     "curves_count": {
       "data_type": "0",
       "value": 15
