@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="Adw" version="1.0"/>
+  <template class="AppPreferences" parent="AdwPreferencesDialog">
+    <child>
+      <object class="AdwPreferencesPage">
+        <child>
+          <object class="AdwPreferencesGroup">
+            <property name="title">General</property>
+            <child>
+              <object class="AdwEntryRow">
+                <property name="title" translatable="yes">Source directory</property>
+                <property name="tooltip_text" translatable="yes">Select source directory from dialog window.</property>
+                <property name="editable">0</property>
+                <child type="suffix">
+                  <object class="GtkButton">
+                    <property name="icon_name">folder</property>
+                    <property name="has_frame">false</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

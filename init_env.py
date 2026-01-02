@@ -1,7 +1,7 @@
 """
 init_env.py
 
-This module provides funcitons to initialize work environment.
+This module provides functions to initialize work environment.
 Its "main" function is called from app's entry point - ./main.py.
 
 - create database with variables

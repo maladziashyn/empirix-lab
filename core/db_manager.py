@@ -1,3 +1,4 @@
+import json
 import sqlite3
 
 from os.path import dirname,realpath
@@ -11,6 +12,9 @@ import config as c
 
 class DBManager:
     """Parent class for db connection context manager."""
+
+    with open(c.SPECS_TBL_DB, "r") as f:
+        blueprint = json.load(f)
 
     def __init__(self):
         self.con = None
@@ -65,3 +69,5 @@ def select_var(var_name):
     with DBManagerSQLite(c.VAR_DB_FPATH) as dbm:
         result = dbm.select_var(var_name)
     return result
+
+

@@ -15,6 +15,8 @@ project_home_dir = dirname(dirname(realpath(__file__)))
 if project_home_dir not in path:
     path.insert(0, project_home_dir)
 
+
+
 import config as c
 
 PY_TO_SQLITE_DATATYPES = {str: "TEXT", int: "INTEGER", float: "REAL"}
@@ -75,27 +77,10 @@ x_cl_pos = XP_0 + "table[5]"
 x_events = XP_0 + "table[6]"
 
 # User inputs
-db_home = "C:\\RM_local\\misc\\emp_home\\"
-# src_home = "C:\\RM_local\\misc\\empirix_home\\html_raw\\"
-src_home = "/home/rsm/Documents/backtest_raw_reports"
-src_dir = src_home
 
 
-# WAIT (ERRORS): "Allig_stoch_v1"
-
-# my_dirs = ["Greed", "hashi_v1", "hashi_v2", "hey_perry"]
-# my_dirs = ["Pizza"]
-# my_dirs = ["pin_regression"]
-my_dirs = ["Dennis_Richards"]
-
-# new: []
-
-src_dirs = [os.path.join(src_home, d) for d in my_dirs]
-
-src_type = 0  # 0 - old, 1 - new
-user_name = "rsm"
-
-
+def process_from_dir(src_path):
+    print(f"process from dir {src_path}")
 
 
 def get_src_files(src_path):

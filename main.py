@@ -1,3 +1,7 @@
+"""
+All the code is put under if __name__ to work with concurrent.futures.
+"""
+
 if __name__ == "__main__":
     from sys import platform
 
@@ -21,6 +25,7 @@ if __name__ == "__main__":
     from gresource import compile_register
     from gresource import load_widgets
     from gresource.window import AppWindow
+    from gresource.preferences import AppPreferences
 
 
     class MyApp(Adw.Application):
@@ -31,7 +36,10 @@ if __name__ == "__main__":
                             flags=Gio.ApplicationFlags.DEFAULT_FLAGS)
 
             self.create_action("quit", lambda *_: self.quit(), ["<primary>q"])
+            # self.create_action("preferences", self.open_preferences, ["<primary>p"])
+
             self.create_action("about", self.on_about_action)
+            self.create_action("preferences", self.on_preferences_action, ["<primary>p"])
 
         def do_activate(self):
             """Called when the application is activated.
@@ -46,6 +54,7 @@ if __name__ == "__main__":
 
         def on_about_action(self, *args):
             """Callback for the app.about action."""
+
             about = Adw.AboutDialog(
                 application_name=c.APP_NAME,
                 application_icon=c.APP_ID,
@@ -59,6 +68,13 @@ if __name__ == "__main__":
             # Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
             # about.set_translator_credits(_('translator-credits'))
             about.present(self.props.active_window)
+
+        def on_preferences_action(self, *args):
+            """Callback for the app.preferences action."""
+
+            print("show preferences")
+            AppPreferences().present(parent=None)
+            # parent=self.get_ancestor(Adw.ApplicationWindow)
 
         def create_action(self, name, callback, shortcuts=None):
             """Add an application action.

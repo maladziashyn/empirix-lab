@@ -21,3 +21,6 @@ __pycache__/
 
 # Other
 _misc/
+doc/
+*.kate-swp
+*.bkp

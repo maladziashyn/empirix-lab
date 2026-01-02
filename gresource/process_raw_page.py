@@ -9,8 +9,9 @@ if project_home_dir not in path:
     path.insert(0, project_home_dir)
 
 from config import APP_URL
-# from core import backtest_processor as bp
+from core import backtest_processor as bp
 from core.db_manager import select_var
+from gresource.alert_dialog import AlertDialogTest
 
 
 @Gtk.Template(resource_path=f"{APP_URL}/process_raw_page.ui")
@@ -45,7 +46,13 @@ class ProcessRawScrolledWindow(Gtk.ScrolledWindow):
 
     @Gtk.Template.Callback("btn_callback_02")
     def process_html(self, *args):
-        print("process html")
+
+        if not self.selected_dir:
+            AlertDialogTest().present(
+                parent=self.get_ancestor(Adw.ApplicationWindow)
+            )
+        else:
+            bp.process_from_dir(self.selected_dir)
 
         # sanity_check.run_check(
         #     alert_dialog_parent=self.get_ancestor(Adw.ApplicationWindow),
