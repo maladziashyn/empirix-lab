@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="Adw" version="1.0"/>
+<!--   <requires lib="Adw" version="1.0"/> -->
+  <requires lib="adwaita" version="1.0"/>
   <template class="AppPreferences" parent="AdwPreferencesDialog">
     <child>
       <object class="AdwPreferencesPage">

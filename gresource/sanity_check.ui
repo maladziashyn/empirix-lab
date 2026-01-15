@@ -2,6 +2,7 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <requires lib="Adw" version="1.0"/>
+  <!--<requires lib="adwaita" version="1.0"/>-->
   <template class="SanityCheckScrolledWindow" parent="GtkScrolledWindow">
     <child>
       <object class="AdwClamp">

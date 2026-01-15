@@ -26,11 +26,11 @@ def main():
         print("[BLOCKER] config.py: set GRESOURCE_RECOMPILE to False.")
         return
 
-    with open(join(c.PROJECT_HOME_DIR, "core", "init_work_env.py"), "r") as f:
-        contents = f.read()
-    if not "#     remove(c.VAR_DB_FPATH)" in contents:
-        print("[BLOCKER] init_work_env.py: comment out the line with db removal.")
-        return
+    # with open(join(c.PROJECT_HOME_DIR, "core", "init_work_env.py"), "r") as f:
+    #     contents = f.read()
+    # if not "#     remove(c.VAR_DB_FPATH)" in contents:
+    #     print("[BLOCKER] init_work_env.py: comment out the line with db removal.")
+    #     return
 
 
     # Start with checking/making home dir for packaging process
@@ -66,7 +66,7 @@ def main():
     datas = {
         c.GRESOURCE_BIN: "./gresource",
         c.DEFAULT_VARS_JSON: f"./{c.SPECS_DIR}",
-        c.SPECS_TBL_DB: f"./{SPECS_DIR}",
+        c.SPECS_TBL_DB: f"./{c.SPECS_DIR}",
     }
     if platform == "linux":
         # Add XPM logo for Linux desktop-item

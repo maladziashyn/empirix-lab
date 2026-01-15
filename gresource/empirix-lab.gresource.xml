@@ -7,6 +7,8 @@
     <file preprocess="xml-stripblanks">monte_carlo.ui</file>
     <file preprocess="xml-stripblanks">alert_dialog.ui</file>
     <file preprocess="xml-stripblanks">preferences.ui</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/view-sidebar-start-symbolic.svg</file>
+    <file preprocess="xml-stripblanks">icons/scalable/actions/view-sidebar-start-symbolic-rtl.svg</file>
     <file>icons/scalable/apps/eu.rsmlabs.EmpirixLab.svg</file>
     <!--     <file preprocess="xml-stripblanks">gtk/help-overlay.ui</file> -->
   </gresource>

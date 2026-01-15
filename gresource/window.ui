@@ -2,6 +2,7 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <requires lib="Adw" version="1.0"/>
+<!--   <requires lib="adwaita" version="1.0"/> -->
   <template class="AppWindow" parent="AdwApplicationWindow">
     <property name="width-request">900</property>
     <property name="height-request">550</property>
@@ -22,7 +23,7 @@
           <object class="AdwHeaderBar" id="header_bar">
             <child type="start">
               <object class="GtkToggleButton" id="show_sidebar_button">
-                <property name="icon-name">sidebar-show-symbolic</property>
+                <property name="icon-name">view-sidebar-start-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Toggle Sidebar</property>
                 <property name="active">True</property>
               </object>

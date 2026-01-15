@@ -5,7 +5,7 @@ from os.path import dirname, expanduser, join, realpath
 
 
 # General
-GRESOURCE_RECOMPILE = True  # set to False in PRODUCTION
+GRESOURCE_RECOMPILE = False  # set to False in PRODUCTION
 PROJECT_HOME_DIR = dirname(realpath(__file__))
 
 # # Logging
