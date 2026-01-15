@@ -6,9 +6,9 @@ from os import makedirs, mkdir, system, walk
 from os.path import dirname, expanduser, getsize, isdir, join, realpath
 from sys import platform, path
 
-project_home_dir = dirname(dirname(realpath(__file__)))
-if project_home_dir not in path:
-    path.insert(0, project_home_dir)
+BASE_DIR = dirname(dirname(realpath(__file__)))
+if BASE_DIR not in path:
+    path.insert(0, BASE_DIR)
 
 import config as c
 
@@ -196,13 +196,13 @@ def generate_inno_script(target_dirpath):
     }
     
     # Generate .iss file
-    with open(join(project_home_dir, "_distribution", "inno_tpl.jinja"), "r") as f:
+    with open(join(BASE_DIR, "_distribution", "inno_tpl.jinja"), "r") as f:
         template = Template(f.read())
 
     inno_content = template.render(**inno_values)
 
     # Save the generated .iss file
-    inno_file = join(project_home_dir, "_distribution", "inno_setup_script.iss")
+    inno_file = join(BASE_DIR, "_distribution", "inno_setup_script.iss")
     with open(inno_file, "w") as f_out:
         f_out.write(inno_content)
     
@@ -219,13 +219,13 @@ def pyinstaller_bundle(spec_values, dist_dir, work_dir):
     print("Running PyInstaller...")
     
     # Generate .spec file
-    with open(join(project_home_dir, "_distribution", "tpl.jinja"), "r") as f:
+    with open(join(BASE_DIR, "_distribution", "tpl.jinja"), "r") as f:
         template = Template(f.read())
 
     spec_content = template.render(**spec_values)
 
     # Save the generated .spec file
-    spec_file = join(project_home_dir, "_distribution", "main.spec")
+    spec_file = join(BASE_DIR, "_distribution", "main.spec")
     with open(spec_file, "w") as f_out:
         f_out.write(spec_content)
 
